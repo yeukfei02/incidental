@@ -43,7 +43,7 @@ function IncidentCardList() {
     if (incidents) {
       incidentCardList = incidents.map((incident, i) => {
         return (
-          <Grid key={i} item xs={12} sm={4} className="p-5">
+          <Grid key={i} item xs={12} sm={4} className="p-3">
             <CardView incident={incident} />
           </Grid>
         );

@@ -25,6 +25,8 @@ function AdminDashboard() {
     IncidentType.MEDIUM
   );
 
+  const [searchText, setSearchText] = useState('');
+
   const handleTitleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -47,6 +49,12 @@ function AdminDashboard() {
 
   const handleDialogClose = () => {
     setDialogOpen(false);
+  };
+
+  const handleSearchTextChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setSearchText(e.target.value);
   };
 
   const handleCreateIncident = async () => {
@@ -85,7 +93,14 @@ function AdminDashboard() {
 
   return (
     <div className="px-10 py-8">
-      <div className="flex justify-end">
+      <div className="flex justify-between">
+        <TextField
+          className="w-2/6"
+          id="outlined-basic"
+          label="Search"
+          variant="outlined"
+          onChange={(e) => handleSearchTextChange(e)}
+        />
         <Button variant="outlined" onClick={handleCreateIncidentButtonClick}>
           Create Incident
         </Button>

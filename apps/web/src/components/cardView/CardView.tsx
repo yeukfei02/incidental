@@ -4,7 +4,8 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import { Incident, UserRole } from '@prisma/client';
+import Chip from '@mui/material/Chip';
+import { Incident, IncidentType, Status, UserRole } from '@prisma/client';
 import { useNavigate } from 'react-router-dom';
 import { Url } from '../../helper/url';
 
@@ -74,15 +75,46 @@ function CardView({ incident }: Props) {
   };
 
   return (
-    <Card className="my-3">
+    <Card className="p-3 my-3">
       <CardContent>
         <Typography variant="h5" component="div">
           {incident.title}
         </Typography>
-        <div className="mt-3">
+        <div className="my-4">
           <Typography color="text.secondary" variant="body2">
             {incident.description}
           </Typography>
+        </div>
+        <div className="flex flex-row items-center">
+          <div>
+            <Chip
+              label={incident.type}
+              color={
+                incident.type === IncidentType.HIGH
+                  ? 'error'
+                  : incident.type === IncidentType.MEDIUM
+                  ? 'warning'
+                  : 'info'
+              }
+            />
+          </div>
+          <div className="mx-2">
+            <Chip
+              label={incident.status}
+              color={
+                incident.status === Status.UNASSIGNED
+                  ? 'warning'
+                  : incident.status === Status.ASSIGNED
+                  ? 'primary'
+                  : incident.status === Status.ACKNOWLEDGED
+                  ? 'info'
+                  : incident.status === Status.RESOLVED
+                  ? 'success'
+                  : 'default'
+              }
+              variant="outlined"
+            />
+          </div>
         </div>
       </CardContent>
       <CardActions>
