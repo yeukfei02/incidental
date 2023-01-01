@@ -14,6 +14,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { useNavigate } from 'react-router-dom';
 import { UserRole } from '@prisma/client';
 import * as userService from '../../services/userService';
@@ -24,6 +26,13 @@ interface CopyrightProps {
     mt: number;
   };
 }
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 function Copyright(props: CopyrightProps) {
   return (
@@ -42,6 +51,18 @@ const theme = createTheme();
 
 function Signup() {
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   const [userRoles, setUserRoles] = useState<UserRole>(UserRole.NORMAL_USER);
 
@@ -67,7 +88,10 @@ function Signup() {
         if (response) {
           const responseData = response.data;
           if (responseData) {
-            navigate(Url.LOGIN);
+            setOpen(true);
+            setTimeout(() => {
+              navigate(Url.LOGIN);
+            }, 1500);
           }
         }
       }
@@ -180,6 +204,20 @@ function Signup() {
           </Box>
         </Grid>
       </Grid>
+
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+          Signup success
+        </Alert>
+      </Snackbar>
     </ThemeProvider>
   );
 }

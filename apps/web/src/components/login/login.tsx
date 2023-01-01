@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -10,6 +10,8 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { useNavigate } from 'react-router-dom';
 import * as userService from '../../services/userService';
 import { Url } from '../../helper/url';
@@ -19,6 +21,13 @@ interface CopyrightProps {
     mt: number;
   };
 }
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 function Copyright(props: CopyrightProps) {
   return (
@@ -37,6 +46,18 @@ const theme = createTheme();
 
 function Login() {
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -54,9 +75,12 @@ function Login() {
         if (response) {
           const responseData = response.data;
           if (responseData) {
-            localStorage.setItem('token', responseData.token);
-            navigate(Url.HOME);
-            window.location.reload();
+            setOpen(true);
+            setTimeout(() => {
+              localStorage.setItem('token', responseData.token);
+              navigate(Url.HOME);
+              window.location.reload();
+            }, 1500);
           }
         }
       }
@@ -150,6 +174,20 @@ function Login() {
           </Box>
         </Grid>
       </Grid>
+
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+          Login success
+        </Alert>
+      </Snackbar>
     </ThemeProvider>
   );
 }
