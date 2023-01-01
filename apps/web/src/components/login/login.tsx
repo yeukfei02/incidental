@@ -11,6 +11,19 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+function Copyright(props: any) {
+  return (
+    <Typography
+      variant="body2"
+      color="text.secondary"
+      align="center"
+      {...props}
+    >
+      Created By Donald Wu
+    </Typography>
+  );
+}
+
 const theme = createTheme();
 
 function Login() {
@@ -91,7 +104,7 @@ function Login() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Sign In
+                Login
               </Button>
               <Grid container>
                 <Grid item xs>
@@ -105,7 +118,7 @@ function Login() {
                   </Link>
                 </Grid>
               </Grid>
-              Created By Donald Wu
+              <Copyright sx={{ mt: 5 }} />
             </Box>
           </Box>
         </Grid>

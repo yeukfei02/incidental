@@ -11,6 +11,19 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+function Copyright(props: any) {
+  return (
+    <Typography
+      variant="body2"
+      color="text.secondary"
+      align="center"
+      {...props}
+    >
+      Created By Donald Wu
+    </Typography>
+  );
+}
+
 const theme = createTheme();
 
 function Signup() {
@@ -57,7 +70,7 @@ function Signup() {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Login
+              Sign up
             </Typography>
             <Box
               component="form"
@@ -91,7 +104,7 @@ function Signup() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Sign In
+                Sign up
               </Button>
               <Grid container>
                 <Grid item xs>
@@ -101,11 +114,11 @@ function Signup() {
                 </Grid>
                 <Grid item>
                   <Link href="#" variant="body2">
-                    {"Don't have an account? Sign Up"}
+                    {'Have an account? Login'}
                   </Link>
                 </Grid>
               </Grid>
-              Created By Donald Wu
+              <Copyright sx={{ mt: 5 }} />
             </Box>
           </Box>
         </Grid>
