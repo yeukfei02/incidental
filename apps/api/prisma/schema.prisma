@@ -31,8 +31,8 @@ model Incident {
   creator_id  String       @db.Uuid
   assignee_id String?      @db.Uuid
   status      Status       @default(NOT_ASSIGNED)
-  created_at  DateTime     @default(now())
-  updated_at  DateTime     @default(now())
+  created_at  DateTime     @default(now()) @db.Timestamptz(6)
+  updated_at  DateTime     @default(now()) @db.Timestamptz(6)
   assignee    User?        @relation("assignee", fields: [assignee_id], references: [id])
   creator     User?        @relation("creator", fields: [creator_id], references: [id])
 
