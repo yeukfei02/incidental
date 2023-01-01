@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String     @id @default(uuid()) @db.Uuid
+  email             String     @unique
+  password          String
+  created_at        DateTime   @default(now()) @db.Timestamptz(6)
+  updated_at        DateTime   @default(now()) @db.Timestamptz(6)
+  userRoles         UserRole[] @default([NORMAL_USER])
+  assigneeIncidents Incident[] @relation("assignee")
+  creatorIncidents  Incident[] @relation("creator")
+
+  @@index([email], map: "index_user_on_email")
+  @@index([password], map: "index_user_on_password")
+  @@index([created_at], map: "index_user_on_created_at")
+  @@index([updated_at], map: "index_user_on_updated_at")
+}
+
+model Incident {
+  id          String       @id @default(uuid()) @db.Uuid
+  title       String
+  description String
+  type        IncidentType @default(MEDIUM)
+  creator_id  String?      @db.Uuid
+  assignee_id String?      @db.Uuid
+  status      Status       @default(NOT_ASSIGNED)
+  created_at  DateTime     @default(now())
+  updated_at  DateTime     @default(now())
+  assignee    User?        @relation("assignee", fields: [assignee_id], references: [id])
+  creator     User?        @relation("creator", fields: [creator_id], references: [id])
+
+  @@index([title], map: "index_incident_on_title")
+  @@index([description], map: "index_incident_on_description")
+  @@index([type], map: "index_incident_on_type")
+  @@index([creator_id], map: "index_incident_on_creator_id")
+  @@index([assignee_id], map: "index_incident_on_assignee_id")
+  @@index([status], map: "index_incident_on_status")
+  @@index([created_at], map: "index_incident_on_created_at")
+  @@index([updated_at], map: "index_incident_on_updated_at")
+}
+
+enum UserRole {
+  NORMAL_USER
+  ADMIN
+}
+
+enum IncidentType {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum Status {
+  NOT_ASSIGNED
+  ASSIGNED
+  ACKNOWLEDGED
+  RESOLVED
+}
