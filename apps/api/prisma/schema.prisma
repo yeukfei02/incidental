@@ -28,7 +28,7 @@ model Incident {
   title       String
   description String
   type        IncidentType @default(MEDIUM)
-  creator_id  String?      @db.Uuid
+  creator_id  String       @db.Uuid
   assignee_id String?      @db.Uuid
   status      Status       @default(NOT_ASSIGNED)
   created_at  DateTime     @default(now())
