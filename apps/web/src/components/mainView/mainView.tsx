@@ -1,6 +1,6 @@
 import React from 'react';
-import Login from '../login/login';
-import Dashboard from '../dashboard/dashboard';
+import Login from '../login/Login';
+import Dashboard from '../dashboard/Dashboard';
 
 function MainView() {
   const renderMainView = () => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import CustomAppBar from '../customAppBar/customAppBar';
+import CustomAppBar from '../customAppBar/CustomAppBar';
 
 function Dashboard() {
   return (

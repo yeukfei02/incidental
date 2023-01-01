@@ -1,8 +1,8 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import MainView from '../components/mainView/mainView';
-import Signup from '../components/signup/signup';
-import Login from '../components/login/login';
+import MainView from '../components/mainView/MainView';
+import Signup from '../components/signup/Signup';
+import Login from '../components/login/Login';
 import { Url } from '../helper/url';
 
 function App() {

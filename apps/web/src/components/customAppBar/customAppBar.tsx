@@ -49,13 +49,6 @@ function CustomAppBar() {
           <span
             color="text.primary"
             className="mx-3 cursor-pointer"
-            onClick={() => handleGoToPath(Url.HOME)}
-          >
-            Home
-          </span>
-          <span
-            color="text.primary"
-            className="mx-3 cursor-pointer"
             onClick={() => handleGoToPath(Url.INCIDENTS)}
           >
             Incidents
