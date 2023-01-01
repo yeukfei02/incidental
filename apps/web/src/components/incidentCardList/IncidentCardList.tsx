@@ -6,7 +6,14 @@ import CardView from '../cardView/CardView';
 import { Incident, UserRole } from '@prisma/client';
 import * as incidentService from '../../services/incidentService';
 
-function IncidentCardList() {
+interface Props {
+  token: string | null;
+  userRole: string | null;
+  userId: string | null;
+  searchText: string;
+}
+
+function IncidentCardList({ token, userRole, userId, searchText }: Props) {
   const [incidents, setIncidents] = useState([]);
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -16,9 +23,6 @@ function IncidentCardList() {
   }, []);
 
   const getIncidents = async () => {
-    const token = localStorage.getItem('token');
-    const userRole = localStorage.getItem('userRole');
-    const userId = localStorage.getItem('userId');
     if (token && userRole && userId) {
       const response = await incidentService.getIncidents(
         token,
