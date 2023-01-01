@@ -5,6 +5,7 @@ import { getRootUrl } from '../helper/helper';
 const rootUrl = getRootUrl();
 
 export const createIncident = async (
+  token: string,
   title: string,
   description: string,
   type: IncidentType,
@@ -19,7 +20,11 @@ export const createIncident = async (
     userRole: userRole,
   };
 
-  const response = await axios.post(`${rootUrl}/incidents/create`, data);
+  const response = await axios.post(`${rootUrl}/incidents/create`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return response;
 };
 

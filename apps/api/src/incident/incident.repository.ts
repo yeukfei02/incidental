@@ -10,7 +10,7 @@ export class IncidentRepository {
     title: string,
     description: string,
     type: IncidentType,
-    creator_id: string,
+    creatorId: string,
     userRole: UserRole
   ) {
     let incident: Incident;
@@ -21,7 +21,7 @@ export class IncidentRepository {
           title: title,
           description: description,
           type: type,
-          creator_id: creator_id,
+          creator_id: creatorId,
         },
       });
     }

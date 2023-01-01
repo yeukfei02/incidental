@@ -10,14 +10,14 @@ export class IncidentService {
     title: string,
     description: string,
     type: IncidentType,
-    creator_id: string,
+    creatorId: string,
     userRole: UserRole
   ) {
     const incident = await this.incidentRepository.createIncident(
       title,
       description,
       type,
-      creator_id,
+      creatorId,
       userRole
     );
     return incident;

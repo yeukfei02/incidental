@@ -37,7 +37,7 @@ function CustomAppBar() {
   return (
     <AppBar
       position="static"
-      color="default"
+      color="primary"
       elevation={0}
       sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}
     >

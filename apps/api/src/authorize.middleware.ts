@@ -25,6 +25,10 @@ export class AuthorizeMiddleware implements NestMiddleware {
           message: 'Unauthorized',
         });
       }
+    } else {
+      res.status(401).json({
+        message: 'Unauthorized',
+      });
     }
   }
 }

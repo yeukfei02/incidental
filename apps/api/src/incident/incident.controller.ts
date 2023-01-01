@@ -18,14 +18,14 @@ export class IncidentController {
     const title = createIncidentDto.title;
     const description = createIncidentDto.description;
     const type = createIncidentDto.type;
-    const creator_id = createIncidentDto.creator_id;
+    const creatorId = createIncidentDto.creatorId;
     const userRole = createIncidentDto.userRole;
 
     const incident = await this.incidentService.createIncident(
       title,
       description,
       type,
-      creator_id,
+      creatorId,
       userRole
     );
     if (incident) {

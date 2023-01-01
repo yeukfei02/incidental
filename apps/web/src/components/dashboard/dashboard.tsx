@@ -1,17 +1,29 @@
-import React, { useState } from 'react';
+import React from 'react';
 import CustomAppBar from '../customAppBar/CustomAppBar';
-import CustomSnackBar from '../customSnackBar/CustomSnackBar';
-import * as incidentService from '../services/incidentService';
+import { UserRole } from '@prisma/client';
+import AdminDashboard from '../adminDashboard/AdminDashboard';
+import NormalUserDashboard from '../normalUserDashboard/NormalUserDashboard';
 
 function Dashboard() {
-  const [open, setOpen] = useState(false);
+  const renderDashboard = () => {
+    let dashboard;
+
+    const userRole = localStorage.getItem('userRole');
+    if (userRole) {
+      if (userRole === UserRole.ADMIN) {
+        dashboard = <AdminDashboard />;
+      } else if (userRole === UserRole.NORMAL_USER) {
+        dashboard = <NormalUserDashboard />;
+      }
+    }
+
+    return dashboard;
+  };
 
   return (
     <>
       <CustomAppBar />
-      
-      
-      <CustomSnackBar type="Create incident" open={open} setOpen={setOpen} />
+      {renderDashboard()}
     </>
   );
 }

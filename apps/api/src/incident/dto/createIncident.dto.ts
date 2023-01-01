@@ -4,6 +4,6 @@ export class CreateIncidentDto {
   title: string;
   description: string;
   type: IncidentType;
-  creator_id: string;
+  creatorId: string;
   userRole: UserRole;
 }
