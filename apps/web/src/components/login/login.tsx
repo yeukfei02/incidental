@@ -10,8 +10,17 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
+import * as userService from '../../services/userService';
+import { Url } from '../../helper/url';
 
-function Copyright(props: any) {
+interface CopyrightProps {
+  sx: {
+    mt: number;
+  };
+}
+
+function Copyright(props: CopyrightProps) {
   return (
     <Typography
       variant="body2"
@@ -27,13 +36,31 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 function Login() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    if (data) {
+      const email = data.get('email');
+      const password = data.get('password');
+      if (email && password) {
+        const emailStr = email as string;
+        const passwordStr = password as string;
+        const response = await userService.login(emailStr, passwordStr);
+        console.log('response = ', response);
+
+        if (response) {
+          const responseData = response.data;
+          if (responseData) {
+            localStorage.setItem('token', responseData.token);
+            navigate(Url.HOME);
+            window.location.reload();
+          }
+        }
+      }
+    }
   };
 
   return (
@@ -113,7 +140,7 @@ function Login() {
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="#" variant="body2">
+                  <Link href={Url.SIGN_UP} variant="body2">
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>

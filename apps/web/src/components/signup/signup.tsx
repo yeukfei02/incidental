@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -9,9 +9,23 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
+import { UserRole } from '@prisma/client';
+import * as userService from '../../services/userService';
+import { Url } from '../../helper/url';
 
-function Copyright(props: any) {
+interface CopyrightProps {
+  sx: {
+    mt: number;
+  };
+}
+
+function Copyright(props: CopyrightProps) {
   return (
     <Typography
       variant="body2"
@@ -27,13 +41,37 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 function Signup() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const navigate = useNavigate();
+
+  const [userRoles, setUserRoles] = useState<UserRole>(UserRole.NORMAL_USER);
+
+  const handleUserRolesChange = (event: SelectChangeEvent) => {
+    setUserRoles(event.target.value as UserRole);
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    if (data) {
+      const email = data.get('email');
+      const password = data.get('password');
+      if (email && password && userRoles) {
+        const emailStr = email as string;
+        const passwordStr = password as string;
+        const response = await userService.signup(emailStr, passwordStr, [
+          userRoles,
+        ]);
+        console.log('response = ', response);
+
+        if (response) {
+          const responseData = response.data;
+          if (responseData) {
+            navigate(Url.LOGIN);
+          }
+        }
+      }
+    }
   };
 
   return (
@@ -98,6 +136,25 @@ function Signup() {
                 id="password"
                 autoComplete="current-password"
               />
+              <div className="my-5">
+                <FormControl className="w-full">
+                  <InputLabel id="demo-simple-select-helper-label">
+                    User Roles
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-helper-label"
+                    id="demo-simple-select-helper"
+                    value={userRoles}
+                    label="User Roles"
+                    onChange={handleUserRolesChange}
+                  >
+                    <MenuItem value={UserRole.NORMAL_USER}>
+                      Normal User
+                    </MenuItem>
+                    <MenuItem value={UserRole.ADMIN}>Admin</MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
               <Button
                 type="submit"
                 fullWidth
@@ -113,7 +170,7 @@ function Signup() {
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="#" variant="body2">
+                  <Link href="/login" variant="body2">
                     {'Have an account? Login'}
                   </Link>
                 </Grid>
