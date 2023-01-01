@@ -11,10 +11,15 @@
     "yarn": "1.22.19"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@mui/icons-material": "^5.11.0",
+    "@mui/material": "^5.11.2",
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
     "@prisma/client": "^4.8.0",
+    "axios": "^1.2.2",
     "bcryptjs": "^2.4.3",
     "compression": "^1.7.4",
     "helmet": "^6.0.1",
