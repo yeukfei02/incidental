@@ -30,7 +30,7 @@ model Incident {
   type        IncidentType @default(MEDIUM)
   creator_id  String       @db.Uuid
   assignee_id String?      @db.Uuid
-  status      Status       @default(NOT_ASSIGNED)
+  status      Status       @default(UNASSIGNED)
   created_at  DateTime     @default(now()) @db.Timestamptz(6)
   updated_at  DateTime     @default(now()) @db.Timestamptz(6)
   assignee    User?        @relation("assignee", fields: [assignee_id], references: [id])
@@ -58,7 +58,7 @@ enum IncidentType {
 }
 
 enum Status {
-  NOT_ASSIGNED
+  UNASSIGNED
   ASSIGNED
   ACKNOWLEDGED
   RESOLVED
