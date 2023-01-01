@@ -1,7 +1,7 @@
 import React from 'react';
 
-function AdminDashboard() {
+function NormalDashboard() {
   return <>NormalDashboard</>;
 }
 
-export default AdminDashboard;
+export default NormalDashboard;
