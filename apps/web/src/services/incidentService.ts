@@ -28,7 +28,11 @@ export const createIncident = async (
   return response;
 };
 
-export const listIncidents = async (userRole: UserRole, userId: string) => {
+export const getIncidents = async (
+  token: string,
+  userRole: UserRole,
+  userId: string
+) => {
   const params = {
     userRole: userRole,
     userId: userId,
@@ -36,6 +40,9 @@ export const listIncidents = async (userRole: UserRole, userId: string) => {
 
   const response = await axios.get(`${rootUrl}/incidents/list`, {
     params: params,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   });
   return response;
 };

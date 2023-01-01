@@ -4,6 +4,7 @@ export enum Url {
   LOGIN = '/login',
 
   INCIDENTS = '/incidents',
+  INCIDENT_DETAIL = `/incident/:id`,
 
   PROFILE = '/profile',
   SETTINGS = '/settings',

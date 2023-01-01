@@ -11,6 +11,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import CustomSnackBar from '../customSnackBar/CustomSnackBar';
+import IncidentCardList from '../incidentCardList/IncidentCardList';
 import { IncidentType, UserRole } from '@prisma/client';
 import * as incidentService from '../../services/incidentService';
 
@@ -53,7 +54,15 @@ function AdminDashboard() {
     const creatorId = localStorage.getItem('userId');
     const userRole = localStorage.getItem('userRole');
 
-    if (token && creatorId && userRole && userRole === UserRole.ADMIN) {
+    if (
+      token &&
+      title &&
+      description &&
+      incidentType &&
+      creatorId &&
+      userRole &&
+      userRole === UserRole.ADMIN
+    ) {
       const response = await incidentService.createIncident(
         token,
         title,
@@ -81,6 +90,8 @@ function AdminDashboard() {
           Create Incident
         </Button>
       </div>
+
+      <IncidentCardList />
 
       <Dialog
         open={dialogOpen}
