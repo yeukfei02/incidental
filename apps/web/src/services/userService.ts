@@ -15,7 +15,7 @@ export const signup = async (
     userRoles: userRoles,
   };
 
-  const response = await axios.post(`${rootUrl}/user/signup`, data);
+  const response = await axios.post(`${rootUrl}/users/signup`, data);
   return response;
 };
 
@@ -25,6 +25,6 @@ export const login = async (email: string, password: string) => {
     password: password,
   };
 
-  const response = await axios.post(`${rootUrl}/user/login`, data);
+  const response = await axios.post(`${rootUrl}/users/login`, data);
   return response;
 };

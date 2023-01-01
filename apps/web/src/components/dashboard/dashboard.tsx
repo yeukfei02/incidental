@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import CustomAppBar from '../customAppBar/CustomAppBar';
+import CustomSnackBar from '../customSnackBar/CustomSnackBar';
+import * as incidentService from '../services/incidentService';
 
 function Dashboard() {
+  const [open, setOpen] = useState(false);
+
   return (
     <>
       <CustomAppBar />
-      Dashboard
+      
+      
+      <CustomSnackBar type="Create incident" open={open} setOpen={setOpen} />
     </>
   );
 }
