@@ -7,7 +7,7 @@ import { LoginDto } from './dto/login.dto';
 import { SignupRes } from './interface/signup.interface';
 import { LoginRes } from './interface/login.interface';
 
-@Controller('user')
+@Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
