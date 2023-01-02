@@ -239,7 +239,7 @@ function CardView({ incident, normalUsers, getIncidents }: Props) {
 
     const minutesDiff = now.diff(incidentCreatedDate, 'minutes');
     const hoursDiff = now.diff(incidentCreatedDate, 'hours');
-    
+
     let timeDiffStr = '';
     if (minutesDiff <= 60) {
       timeDiffStr = `${minutesDiff} minutes ago`;
@@ -253,16 +253,14 @@ function CardView({ incident, normalUsers, getIncidents }: Props) {
   return (
     <>
       <Card className="p-3 my-3">
-        {
-          userRole && userRole === UserRole.ADMIN ?
+        {userRole && userRole === UserRole.ADMIN ? (
           <div className="flex justify-end m-1">
-          <CloseIcon
-            className="cursor-pointer"
-            onClick={() => handleDeleteButtonClick()}
-          />
-        </div>:
-        null
-        }
+            <CloseIcon
+              className="cursor-pointer"
+              onClick={() => handleDeleteButtonClick()}
+            />
+          </div>
+        ) : null}
         <CardContent>
           <Typography variant="h5" component="div">
             {incident.title}
