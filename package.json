@@ -1,6 +1,6 @@
 {
   "name": "incidental",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "index.js",
   "repository": "https://github.com/yeukfei02/incidental.git",
   "author": "Donald Wu <yeukfei02@gmail.com>",
