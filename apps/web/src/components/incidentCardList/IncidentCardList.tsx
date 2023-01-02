@@ -39,7 +39,11 @@ function IncidentCardList({ incidents, getIncidents }: Props) {
       incidentCardList = incidents.map((incident, i) => {
         return (
           <Grid key={i} item xs={12} sm={4} className="p-3">
-            <CardView incident={incident} normalUsers={normalUsers} getIncidents={getIncidents} />
+            <CardView
+              incident={incident}
+              normalUsers={normalUsers}
+              getIncidents={getIncidents}
+            />
           </Grid>
         );
       });
