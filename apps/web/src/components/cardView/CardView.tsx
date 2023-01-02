@@ -251,7 +251,11 @@ function CardView({ incident, normalUsers, getIncidents }: Props) {
           </div>
 
           <div className="mt-3">
-            <Typography className="italic" color="text.secondary" variant="subtitle2">
+            <Typography
+              className="italic"
+              color="text.secondary"
+              variant="subtitle2"
+            >
               {getTimeDiffStr()}
             </Typography>
           </div>
