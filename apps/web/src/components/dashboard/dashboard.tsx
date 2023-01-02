@@ -3,6 +3,7 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
+import Pagination from '@mui/material/Pagination';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
@@ -30,23 +31,31 @@ function Dashboard() {
   );
 
   const [incidents, setIncidents] = useState([]);
+  const [totalPageCount, setTotalPageCount] = useState(0);
+
   const [searchText, setSearchText] = useState('');
+  const [page, setPage] = useState(1);
 
   const token = localStorage.getItem('token');
   const userRole = localStorage.getItem('userRole');
   const userId = localStorage.getItem('userId');
 
   useEffect(() => {
-    getIncidents(searchText);
-  }, [searchText]);
+    getIncidents(searchText, page);
+  }, [searchText, page]);
 
-  const getIncidents = async (searchText?: string) => {
+  const getIncidents = async (searchText?: string, page?: number) => {
     if (token && userRole && userId) {
+      const pageStr = page ? page.toString() : '1';
+      const perPageStr = '10';
+
       const response = await incidentService.getIncidents(
         token,
         userRole as UserRole,
         userId,
-        searchText
+        searchText,
+        pageStr,
+        perPageStr
       );
       console.log('response = ', response);
 
@@ -56,6 +65,7 @@ function Dashboard() {
           setSnackbarOpen(true);
           setSnackbarText('Get incidents');
           setIncidents(responseData.incidents);
+          setTotalPageCount(responseData.totalPageCount);
         }
       }
     }
@@ -132,6 +142,10 @@ function Dashboard() {
     }
   };
 
+  const handlePageChange = (e: React.ChangeEvent<unknown>, page: number) => { 
+    setPage(page);
+  };
+
   return (
     <>
       <CustomAppBar />
@@ -159,6 +173,17 @@ function Dashboard() {
             </Button>
           ) : null}
         </div>
+
+        <Pagination
+          className="my-5"
+          count={totalPageCount}
+          page={page}
+          onChange={handlePageChange}
+          variant="outlined"
+          color="primary"
+          showFirstButton
+          showLastButton
+        />
 
         <IncidentCardList incidents={incidents} getIncidents={getIncidents} />
 

@@ -32,12 +32,20 @@ export const getIncidents = async (
   token: string,
   userRole: UserRole,
   userId: string,
-  searchText?: string
+  searchText?: string,
+  pageStr?: string,
+  perPageStr?: string
 ) => {
   const params = {
     userRole: userRole,
     userId: userId,
     ...(searchText && { searchText: searchText }),
+    ...(pageStr && {
+      page: pageStr,
+    }),
+    ...(perPageStr && {
+      perPage: perPageStr,
+    }),
   };
 
   const response = await axios.get(`${rootUrl}/incidents/list`, {

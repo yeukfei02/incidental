@@ -29,109 +29,79 @@ export class IncidentRepository {
     return incident;
   }
 
-  async findIncidents(userRole: UserRole, userId: string, searchText?: string) {
-    let incidents: Incident[];
+  async findIncidents(
+    userRole: UserRole,
+    userId: string,
+    searchText?: string,
+    page?: string,
+    perPage?: string
+  ) {
+    const pageInt = page ? parseInt(page, 10) : 1;
+    const perPageInt = perPage ? parseInt(perPage, 10) : 10;
 
-    if (userRole === UserRole.ADMIN) {
-      incidents = await this.prisma.incident.findMany({
-        where: {
+    const incidents = await this.prisma.incident.findMany({
+      where: {
+        ...(userRole === UserRole.ADMIN && {
           creator_id: userId,
-          ...(searchText && {
-            OR: [
-              {
-                title: {
-                  contains: searchText,
-                  mode: 'insensitive',
-                },
-              },
-              {
-                description: {
-                  contains: searchText,
-                  mode: 'insensitive',
-                },
-              },
-            ],
-          }),
-        },
-        orderBy: {
-          created_at: 'desc',
-        },
-        include: {
-          creator: {
-            select: {
-              id: true,
-              name: true,
-              email: true,
-              created_at: true,
-              updated_at: true,
-              userRoles: true,
-            },
-          },
-          assignee: {
-            select: {
-              id: true,
-              name: true,
-              email: true,
-              created_at: true,
-              updated_at: true,
-              userRoles: true,
-            },
-          },
-        },
-      });
-    } else if (userRole === UserRole.NORMAL_USER) {
-      incidents = await this.prisma.incident.findMany({
-        where: {
+        }),
+        ...(userRole === UserRole.NORMAL_USER && {
           assignee_id: userId,
-          ...(searchText && {
-            OR: [
-              {
-                title: {
-                  contains: searchText,
-                  mode: 'insensitive',
-                },
+        }),
+        ...(searchText && {
+          OR: [
+            {
+              title: {
+                contains: searchText,
+                mode: 'insensitive',
               },
-              {
-                description: {
-                  contains: searchText,
-                  mode: 'insensitive',
-                },
+            },
+            {
+              description: {
+                contains: searchText,
+                mode: 'insensitive',
               },
-            ],
-          }),
-        },
-        orderBy: {
-          created_at: 'desc',
-        },
-        include: {
-          creator: {
-            select: {
-              id: true,
-              name: true,
-              email: true,
-              created_at: true,
-              updated_at: true,
-              userRoles: true,
             },
-          },
-          assignee: {
-            select: {
-              id: true,
-              name: true,
-              email: true,
-              created_at: true,
-              updated_at: true,
-              userRoles: true,
-            },
+          ],
+        }),
+      },
+      orderBy: {
+        created_at: 'desc',
+      },
+      skip: pageInt > 1 ? pageInt * perPageInt - perPageInt : 0,
+      take: perPageInt,
+      include: {
+        creator: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            created_at: true,
+            updated_at: true,
+            userRoles: true,
           },
         },
-      });
-    }
+        assignee: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            created_at: true,
+            updated_at: true,
+            userRoles: true,
+          },
+        },
+      },
+    });
 
     return incidents;
   }
 
-  async findIncident(id: string) {
+  async findAllIncidents() {
+    const allIncidents = await this.prisma.incident.findMany({});
+    return allIncidents;
+  }
+
+  async findIncidentById(id: string) {
     const incident = await this.prisma.incident.findUnique({
       where: {
         id: id,

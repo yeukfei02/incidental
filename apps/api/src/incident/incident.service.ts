@@ -23,17 +23,30 @@ export class IncidentService {
     return incident;
   }
 
-  async getIncidents(userRole: UserRole, userId: string, searchText?: string) {
+  async getIncidents(
+    userRole: UserRole,
+    userId: string,
+    searchText?: string,
+    page?: string,
+    perPage?: string
+  ) {
     const incidents = await this.incidentRepository.findIncidents(
       userRole,
       userId,
-      searchText
+      searchText,
+      page,
+      perPage
     );
     return incidents;
   }
 
+  async getAllIncidents() {
+    const allIncidents = await this.incidentRepository.findAllIncidents();
+    return allIncidents;
+  }
+
   async getIncidentById(id: string) {
-    const incident = await this.incidentRepository.findIncident(id);
+    const incident = await this.incidentRepository.findIncidentById(id);
     return incident;
   }
 

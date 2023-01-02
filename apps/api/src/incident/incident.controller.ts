@@ -57,19 +57,34 @@ export class IncidentController {
   async getIncidents(
     @Query('userRole') userRole: UserRole,
     @Query('userId') userId: string,
-    @Query('searchText') searchText?: string
+    @Query('searchText') searchText?: string,
+    @Query('page') page?: string,
+    @Query('perPage') perPage?: string
   ): Promise<GetIncidentsRes> {
     let response: GetIncidentsRes;
 
     const incidents = await this.incidentService.getIncidents(
       userRole,
       userId,
-      searchText
+      searchText,
+      page,
+      perPage
     );
+    const allIncidents = await this.incidentService.getAllIncidents();
+
+    const pageInt = page ? parseInt(page, 10) : 1;
+    const perPageInt = perPage ? parseInt(perPage, 10) : 10;
+
     if (incidents) {
       response = {
         message: 'get incidents',
         incidents: incidents,
+        total: incidents.length,
+        page: pageInt,
+        perPage: perPageInt,
+        totalPageCount: allIncidents
+          ? Math.floor(allIncidents.length / perPageInt)
+          : 0,
       };
     }
 
