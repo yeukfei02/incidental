@@ -124,7 +124,7 @@ function Dashboard() {
           setTitle('');
           setDescription('');
           setIncidentType(IncidentType.MEDIUM);
-          
+
           await getIncidents(searchText);
         }
       }
