@@ -7,10 +7,16 @@ import bcrypt from 'bcryptjs';
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async signup(email: string, password: string, userRoles: UserRole[]) {
+  async signup(
+    name: string,
+    email: string,
+    password: string,
+    userRoles: UserRole[]
+  ) {
     let user = null;
 
     const createdUser = await this.userRepository.createUser(
+      name,
       email,
       password,
       userRoles
@@ -18,6 +24,7 @@ export class UserService {
     if (createdUser) {
       user = {
         id: createdUser.id,
+        name: createdUser.name,
         email: createdUser.email,
         created_at: createdUser.created_at,
         updated_at: createdUser.updated_at,
@@ -37,6 +44,7 @@ export class UserService {
       if (isValidPassword) {
         user = {
           id: userFromDB.id,
+          name: userFromDB.name,
           email: userFromDB.email,
           created_at: userFromDB.created_at,
           updated_at: userFromDB.updated_at,

@@ -1,44 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import CustomSnackBar from '../customSnackBar/CustomSnackBar';
 import CardView from '../cardView/CardView';
-import { Incident, UserRole } from '@prisma/client';
-import * as incidentService from '../../services/incidentService';
+import { Incident } from '@prisma/client';
+import * as userService from '../../services/userService';
 
 interface Props {
-  token: string | null;
-  userRole: string | null;
-  userId: string | null;
-  searchText: string;
+  incidents: Incident[];
 }
 
-function IncidentCardList({ token, userRole, userId, searchText }: Props) {
-  const [incidents, setIncidents] = useState([]);
-
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
+function IncidentCardList({ incidents }: Props) {
+  const [normalUsers, setNormalUsers] = useState([]);
 
   useEffect(() => {
-    if (token && userRole && userId) {
-      getIncidents(searchText);
-    }
-  }, [token, userRole, userId, searchText]);
+    getNormalUsers();
+  }, []);
 
-  const getIncidents = async (searchText?: string) => {
-    if (token && userRole && userId) {
-      const response = await incidentService.getIncidents(
-        token,
-        userRole as UserRole,
-        userId,
-        searchText
-      );
-      console.log('response = ', response);
-
+  const getNormalUsers = async () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const response = await userService.getNormalUsers(token);
       if (response) {
         const responseData = response.data;
         if (responseData) {
-          setSnackbarOpen(true);
-          setIncidents(responseData.incidents);
+          setNormalUsers(responseData.users);
         }
       }
     }
@@ -51,7 +36,7 @@ function IncidentCardList({ token, userRole, userId, searchText }: Props) {
       incidentCardList = incidents.map((incident, i) => {
         return (
           <Grid key={i} item xs={12} sm={4} className="p-3">
-            <CardView incident={incident} />
+            <CardView incident={incident} normalUsers={normalUsers} />
           </Grid>
         );
       });
@@ -65,12 +50,6 @@ function IncidentCardList({ token, userRole, userId, searchText }: Props) {
       <Grid container spacing={2}>
         {renderIncidentCardList(incidents)}
       </Grid>
-
-      <CustomSnackBar
-        type="Get incidents"
-        open={snackbarOpen}
-        setOpen={setSnackbarOpen}
-      />
     </Box>
   );
 }

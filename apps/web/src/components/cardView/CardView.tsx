@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -14,39 +14,22 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Incident, IncidentType, Status, UserRole } from '@prisma/client';
+import CloseIcon from '@mui/icons-material/Close';
+import { Incident, IncidentType, Status, User, UserRole } from '@prisma/client';
 import { useNavigate } from 'react-router-dom';
 import { Url } from '../../helper/url';
-import * as userService from '../../services/userService';
-import * as incidentService from '../../services/incidentService';
 
 interface Props {
   incident: Incident;
+  normalUsers: User[];
 }
 
-function CardView({ incident }: Props) {
+function CardView({ incident, normalUsers }: Props) {
   const navigate = useNavigate();
+  const [dialogText, setDialogText] = useState('');
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const [normalUsers, setNormalUsers] = useState([]);
   const [normalUser, setNormalUser] = useState('');
-
-  useEffect(() => {
-    getNormalUsers();
-  }, []);
-
-  const getNormalUsers = async () => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      const response = await userService.getNormalUsers(token);
-      if (response) {
-        const responseData = response.data;
-        if (responseData) {
-          setNormalUsers(responseData.users);
-        }
-      }
-    }
-  };
 
   const handleDialogClose = () => {
     setDialogOpen(false);
@@ -66,6 +49,12 @@ function CardView({ incident }: Props) {
 
   const handleAssignClick = () => {
     setDialogOpen(true);
+    setDialogText('Assign User');
+  };
+
+  const handleDeleteButtonClick = () => {
+    setDialogOpen(true);
+    setDialogText('Delete Incident');
   };
 
   const handleAcknowledgeClick = () => {
@@ -78,6 +67,10 @@ function CardView({ incident }: Props) {
 
   const handleAssignUser = async () => {
     console.log('assign user api');
+  };
+
+  const handleDeleteIncident = async () => {
+    console.log('delete incident api');
   };
 
   const renderCardButton = () => {
@@ -122,7 +115,7 @@ function CardView({ incident }: Props) {
     let normalUsersDropdown;
 
     if (normalUsers) {
-      normalUsersDropdown = normalUsers.map((user: any, i) => {
+      normalUsersDropdown = normalUsers.map((user: User, i: number) => {
         return (
           <MenuItem key={i} value={user.id}>
             {user.name}
@@ -137,6 +130,12 @@ function CardView({ incident }: Props) {
   return (
     <>
       <Card className="p-3 my-3">
+        <div className="flex justify-end m-1">
+          <CloseIcon
+            className="cursor-pointer"
+            onClick={() => handleDeleteButtonClick()}
+          />
+        </div>
         <CardContent>
           <Typography variant="h5" component="div">
             {incident.title}
@@ -197,32 +196,46 @@ function CardView({ incident }: Props) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">Assign User</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{dialogText}</DialogTitle>
         <DialogContent>
-          <Box>
-            <div>
-              <FormControl className="w-full">
-                <InputLabel id="demo-simple-select-helper-label">
-                  Normal Users
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-helper-label"
-                  id="demo-simple-select-helper"
-                  value={normalUser}
-                  label="Incident Type"
-                  onChange={handleNormalUsersChange}
-                >
-                  {renderNormalUsersDropdown()}
-                </Select>
-              </FormControl>
-            </div>
-          </Box>
+          {dialogText === 'Assign User' ? (
+            <Box>
+              <div>
+                <FormControl className="w-full">
+                  <InputLabel id="demo-simple-select-helper-label">
+                    Normal Users
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-helper-label"
+                    id="demo-simple-select-helper"
+                    value={normalUser}
+                    label="Incident Type"
+                    onChange={handleNormalUsersChange}
+                  >
+                    {renderNormalUsersDropdown()}
+                  </Select>
+                </FormControl>
+              </div>
+            </Box>
+          ) : dialogText === 'Delete Incident' ? (
+            <div>Are you sure want to remove this incident?</div>
+          ) : null}
         </DialogContent>
         <DialogActions>
           <Button color="secondary" onClick={handleDialogClose}>
             Cancel
           </Button>
-          <Button onClick={() => handleAssignUser()}>Assign User</Button>
+          <Button
+            onClick={
+              dialogText === 'Assign User'
+                ? () => handleAssignUser()
+                : dialogText === 'Delete Incident'
+                ? () => handleDeleteIncident()
+                : undefined
+            }
+          >
+            {dialogText}
+          </Button>
         </DialogActions>
       </Dialog>
     </>

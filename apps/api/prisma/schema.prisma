@@ -9,6 +9,7 @@ datasource db {
 
 model User {
   id                String     @id @default(uuid()) @db.Uuid
+  name              String     
   email             String     @unique
   password          String
   created_at        DateTime   @default(now()) @db.Timestamptz(6)
@@ -17,6 +18,7 @@ model User {
   assigneeIncidents Incident[] @relation("assignee")
   creatorIncidents  Incident[] @relation("creator")
 
+  @@index([name], map: "index_user_on_name")
   @@index([email], map: "index_user_on_email")
   @@index([password], map: "index_user_on_password")
   @@index([created_at], map: "index_user_on_created_at")

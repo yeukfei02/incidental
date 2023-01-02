@@ -5,11 +5,13 @@ import { getRootUrl } from '../helper/helper';
 const rootUrl = getRootUrl();
 
 export const signup = async (
+  name: string,
   email: string,
   password: string,
   userRoles: UserRole[]
 ) => {
   const data = {
+    name: name,
     email: email,
     password: password,
     userRoles: userRoles,

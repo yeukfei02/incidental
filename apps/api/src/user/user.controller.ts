@@ -16,6 +16,7 @@ export class UserController {
   async signup(@Body() signupDto: SignupDto): Promise<SignupRes> {
     let response: SignupRes;
 
+    const name = signupDto.name;
     const email = signupDto.email;
 
     const salt = bcrypt.genSaltSync(10);
@@ -24,6 +25,7 @@ export class UserController {
     const userRoles = signupDto.userRoles;
 
     const user = await this.userService.signup(
+      name,
       email,
       hashedPassword,
       userRoles

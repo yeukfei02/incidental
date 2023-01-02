@@ -56,14 +56,19 @@ function Signup() {
 
     const data = new FormData(event.currentTarget);
     if (data) {
+      const name = data.get('name');
       const email = data.get('email');
       const password = data.get('password');
-      if (email && password && userRoles) {
+      if (name && email && password && userRoles) {
+        const nameStr = name as string;
         const emailStr = email as string;
         const passwordStr = password as string;
-        const response = await userService.signup(emailStr, passwordStr, [
-          userRoles,
-        ]);
+        const response = await userService.signup(
+          nameStr,
+          emailStr,
+          passwordStr,
+          [userRoles]
+        );
         console.log('response = ', response);
 
         if (response) {
@@ -125,11 +130,21 @@ function Signup() {
                 margin="normal"
                 required
                 fullWidth
+                id="name"
+                label="Name"
+                name="name"
+                autoComplete="name"
+                type="text"
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
                 id="email"
                 label="Email Address"
                 name="email"
+                type="email"
                 autoComplete="email"
-                autoFocus
               />
               <TextField
                 margin="normal"

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -18,6 +18,7 @@ import * as incidentService from '../../services/incidentService';
 
 function Dashboard() {
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [snackbarText, setSnackbarText] = useState('');
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const [title, setTitle] = useState('');
@@ -26,11 +27,37 @@ function Dashboard() {
     IncidentType.MEDIUM
   );
 
+  const [incidents, setIncidents] = useState([]);
   const [searchText, setSearchText] = useState('');
 
   const token = localStorage.getItem('token');
   const userRole = localStorage.getItem('userRole');
   const userId = localStorage.getItem('userId');
+
+  useEffect(() => {
+    getIncidents(searchText);
+  }, [searchText]);
+
+  const getIncidents = async (searchText?: string) => {
+    if (token && userRole && userId) {
+      const response = await incidentService.getIncidents(
+        token,
+        userRole as UserRole,
+        userId,
+        searchText
+      );
+      console.log('response = ', response);
+
+      if (response) {
+        const responseData = response.data;
+        if (responseData) {
+          setSnackbarOpen(true);
+          setSnackbarText('Get incidents');
+          setIncidents(responseData.incidents);
+        }
+      }
+    }
+  };
 
   const handleTitleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -87,6 +114,8 @@ function Dashboard() {
         if (responseData) {
           setDialogOpen(false);
           setSnackbarOpen(true);
+          setSnackbarText('Create incident');
+          await getIncidents(searchText);
         }
       }
     }
@@ -104,7 +133,7 @@ function Dashboard() {
             variant="outlined"
             onChange={(e) => handleSearchTextChange(e)}
           />
-          {userRole === UserRole.ADMIN ? (
+          {userRole && userRole === UserRole.ADMIN ? (
             <Button
               variant="outlined"
               onClick={handleCreateIncidentButtonClick}
@@ -114,12 +143,7 @@ function Dashboard() {
           ) : null}
         </div>
 
-        <IncidentCardList
-          token={token}
-          userRole={userRole}
-          userId={userId}
-          searchText={searchText}
-        />
+        <IncidentCardList incidents={incidents} />
 
         <Dialog
           open={dialogOpen}
@@ -186,7 +210,7 @@ function Dashboard() {
         </Dialog>
 
         <CustomSnackBar
-          type="Create incident"
+          type={snackbarText}
           open={snackbarOpen}
           setOpen={setSnackbarOpen}
         />

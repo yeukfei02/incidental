@@ -21,11 +21,13 @@ async function createUsers() {
 
   const users = [
     {
+      name: faker.name.fullName(),
       email: 'admin@admin.com',
       password: bcrypt.hashSync('admin', salt),
       userRoles: UserRole.ADMIN,
     },
     {
+      name: 'Donald Wu',
       email: 'yeukfei02@gmail.com',
       password: bcrypt.hashSync('test', salt),
       userRoles: UserRole.NORMAL_USER,

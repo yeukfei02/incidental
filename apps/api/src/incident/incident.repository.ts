@@ -60,6 +60,20 @@ export class IncidentRepository {
       incidents = await this.prisma.incident.findMany({
         where: {
           assignee_id: userId,
+          ...(searchText && {
+            OR: [
+              {
+                title: {
+                  contains: searchText,
+                },
+              },
+              {
+                description: {
+                  contains: searchText,
+                },
+              },
+            ],
+          }),
         },
         include: {
           creator: true,
