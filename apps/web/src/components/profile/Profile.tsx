@@ -11,6 +11,7 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { User, UserRole } from '@prisma/client';
 import * as userService from '../../services/userService';
+import CustomBreadcrumbs from '../customBreadcrumbs/CustomBreadcrumbs';
 
 function Profile() {
   const [user, setUser] = useState<User>();
@@ -67,7 +68,7 @@ function Profile() {
 
     if (user) {
       profileView = (
-        <Container className="mx-10 my-8" component="main" maxWidth="md">
+        <Container className="mx-10" component="main" maxWidth="md">
           <Card className="p-5">
             <div className="my-3">
               <Typography variant="h5" component="div">
@@ -135,6 +136,11 @@ function Profile() {
   return (
     <>
       <CustomAppBar />
+
+      <div className="px-10 py-6">
+        <CustomBreadcrumbs page="Profile" />
+      </div>
+
       {renderProfileView()}
     </>
   );

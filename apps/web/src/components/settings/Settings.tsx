@@ -5,6 +5,7 @@ import TextField from '@mui/material/TextField';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import CustomBreadcrumbs from '../customBreadcrumbs/CustomBreadcrumbs';
 
 function Settings() {
   const [password, setPassword] = useState('');
@@ -28,7 +29,7 @@ function Settings() {
 
   const renderSettingsView = () => {
     const settingsView = (
-      <Container className="mx-10 my-8" component="main" maxWidth="md">
+      <Container className="mx-10" component="main" maxWidth="md">
         <Card className="p-5">
           <div className="my-3">
             <Typography variant="h5" component="div">
@@ -78,6 +79,11 @@ function Settings() {
   return (
     <>
       <CustomAppBar />
+
+      <div className="px-10 py-6">
+        <CustomBreadcrumbs page="Settings" />
+      </div>
+
       {renderSettingsView()}
     </>
   );

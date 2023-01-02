@@ -16,6 +16,7 @@ import IncidentCardList from '../incidentCardList/IncidentCardList';
 import CustomAppBar from '../customAppBar/CustomAppBar';
 import { IncidentType, UserRole } from '@prisma/client';
 import * as incidentService from '../../services/incidentService';
+import CustomBreadcrumbs from '../customBreadcrumbs/CustomBreadcrumbs';
 
 function Dashboard() {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -134,7 +135,12 @@ function Dashboard() {
   return (
     <>
       <CustomAppBar />
-      <div className="px-10 py-8">
+
+      <div className="px-10 py-6">
+        <CustomBreadcrumbs page="Incidents" />
+      </div>
+
+      <div className="px-10">
         <div className="flex justify-between">
           <TextField
             className="w-2/6"

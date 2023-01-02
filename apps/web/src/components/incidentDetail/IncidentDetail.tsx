@@ -12,6 +12,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { useParams } from 'react-router';
 import * as incidentService from '../../services/incidentService';
 import { Incident, IncidentType, Status } from '@prisma/client';
+import CustomBreadcrumbs from '../customBreadcrumbs/CustomBreadcrumbs';
 
 function IncidentDetail() {
   const { id } = useParams();
@@ -78,7 +79,7 @@ function IncidentDetail() {
 
     if (incident) {
       incidentDetailView = (
-        <Container className="mx-10 my-8" component="main" maxWidth="md">
+        <Container className="mx-10" component="main" maxWidth="md">
           <Card className="p-5">
             <div className="my-3">
               <Typography variant="h5" component="div">
@@ -166,6 +167,14 @@ function IncidentDetail() {
   return (
     <>
       <CustomAppBar />
+
+      <div className="px-10 py-6">
+        <CustomBreadcrumbs
+          page="Incident Detail"
+          incidentId={incident ? incident.id : ''}
+        />
+      </div>
+
       {renderIncidentDetailView()}
     </>
   );
