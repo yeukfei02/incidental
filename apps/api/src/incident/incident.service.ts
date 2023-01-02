@@ -40,8 +40,12 @@ export class IncidentService {
     return incidents;
   }
 
-  async getAllIncidents() {
-    const allIncidents = await this.incidentRepository.findAllIncidents();
+  async getAllIncidentsByUserRoleAndUserId(userRole: UserRole, userId: string) {
+    const allIncidents =
+      await this.incidentRepository.findAllIncidentsByUserRoleAndUserId(
+        userRole,
+        userId
+      );
     return allIncidents;
   }
 

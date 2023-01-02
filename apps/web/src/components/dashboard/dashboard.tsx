@@ -142,7 +142,7 @@ function Dashboard() {
     }
   };
 
-  const handlePageChange = (e: React.ChangeEvent<unknown>, page: number) => { 
+  const handlePageChange = (e: React.ChangeEvent<unknown>, page: number) => {
     setPage(page);
   };
 

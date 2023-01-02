@@ -70,7 +70,12 @@ export class IncidentController {
       page,
       perPage
     );
-    const allIncidents = await this.incidentService.getAllIncidents();
+    const allIncidents =
+      await this.incidentService.getAllIncidentsByUserRoleAndUserId(
+        userRole,
+        userId
+      );
+    console.log('allIncidents.length = ', allIncidents.length);
 
     const pageInt = page ? parseInt(page, 10) : 1;
     const perPageInt = perPage ? parseInt(perPage, 10) : 10;
@@ -82,9 +87,10 @@ export class IncidentController {
         total: incidents.length,
         page: pageInt,
         perPage: perPageInt,
-        totalPageCount: allIncidents
-          ? Math.floor(allIncidents.length / perPageInt)
-          : 0,
+        totalPageCount:
+          allIncidents && allIncidents.length > 0
+            ? Math.floor(allIncidents.length / perPageInt) || 1
+            : 1,
       };
     }
 

@@ -96,8 +96,20 @@ export class IncidentRepository {
     return incidents;
   }
 
-  async findAllIncidents() {
-    const allIncidents = await this.prisma.incident.findMany({});
+  async findAllIncidentsByUserRoleAndUserId(
+    userRole: UserRole,
+    userId: string
+  ) {
+    const allIncidents = await this.prisma.incident.findMany({
+      where: {
+        ...(userRole === UserRole.ADMIN && {
+          creator_id: userId,
+        }),
+        ...(userRole === UserRole.NORMAL_USER && {
+          assignee_id: userId,
+        }),
+      },
+    });
     return allIncidents;
   }
 
