@@ -34,7 +34,9 @@ export const getIncidents = async (
   userId: string,
   searchText?: string,
   pageStr?: string,
-  perPageStr?: string
+  perPageStr?: string,
+  sortByCreatedAtStr?: string,
+  sortByUpdatedAtStr?: string
 ) => {
   const params = {
     userRole: userRole,
@@ -45,6 +47,12 @@ export const getIncidents = async (
     }),
     ...(perPageStr && {
       perPage: perPageStr,
+    }),
+    ...(sortByCreatedAtStr && {
+      sortByCreatedAt: sortByCreatedAtStr,
+    }),
+    ...(sortByUpdatedAtStr && {
+      sortByUpdatedAt: sortByUpdatedAtStr,
     }),
   };
 

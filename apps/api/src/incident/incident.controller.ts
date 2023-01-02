@@ -59,7 +59,9 @@ export class IncidentController {
     @Query('userId') userId: string,
     @Query('searchText') searchText?: string,
     @Query('page') page?: string,
-    @Query('perPage') perPage?: string
+    @Query('perPage') perPage?: string,
+    @Query('sortByCreatedAt') sortByCreatedAt?: string,
+    @Query('sortByUpdatedAt') sortByUpdatedAt?: string
   ): Promise<GetIncidentsRes> {
     let response: GetIncidentsRes;
 
@@ -68,7 +70,9 @@ export class IncidentController {
       userId,
       searchText,
       page,
-      perPage
+      perPage,
+      sortByCreatedAt,
+      sortByUpdatedAt
     );
     const allIncidents =
       await this.incidentService.getAllIncidentsByUserRoleAndUserId(

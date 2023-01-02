@@ -34,7 +34,9 @@ export class IncidentRepository {
     userId: string,
     searchText?: string,
     page?: string,
-    perPage?: string
+    perPage?: string,
+    sortByCreatedAt?: string,
+    sortByUpdatedAt?: string
   ) {
     const pageInt = page ? parseInt(page, 10) : 1;
     const perPageInt = perPage ? parseInt(perPage, 10) : 10;
@@ -64,9 +66,20 @@ export class IncidentRepository {
           ],
         }),
       },
-      orderBy: {
-        created_at: 'desc',
-      },
+      orderBy: [
+        {
+          created_at:
+            sortByCreatedAt && sortByCreatedAt === 'true'
+              ? 'asc'
+              : 'desc' || 'desc',
+        },
+        {
+          updated_at:
+            sortByUpdatedAt && sortByUpdatedAt === 'true'
+              ? 'asc'
+              : 'desc' || 'desc',
+        },
+      ],
       skip: pageInt > 1 ? pageInt * perPageInt - perPageInt : 0,
       take: perPageInt,
       include: {
@@ -152,6 +165,7 @@ export class IncidentRepository {
       data: {
         assignee_id: assigneeId,
         status: Status.ASSIGNED,
+        updated_at: new Date(),
       },
       include: {
         creator: {
@@ -186,6 +200,7 @@ export class IncidentRepository {
       },
       data: {
         status: status,
+        updated_at: new Date(),
       },
       include: {
         creator: {

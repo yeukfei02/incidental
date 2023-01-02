@@ -28,14 +28,18 @@ export class IncidentService {
     userId: string,
     searchText?: string,
     page?: string,
-    perPage?: string
+    perPage?: string,
+    sortByCreatedAt?: string,
+    sortByUpdatedAt?: string
   ) {
     const incidents = await this.incidentRepository.findIncidents(
       userRole,
       userId,
       searchText,
       page,
-      perPage
+      perPage,
+      sortByCreatedAt,
+      sortByUpdatedAt
     );
     return incidents;
   }

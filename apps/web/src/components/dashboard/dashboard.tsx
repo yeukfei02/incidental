@@ -4,6 +4,8 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
 import Pagination from '@mui/material/Pagination';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
@@ -35,19 +37,29 @@ function Dashboard() {
 
   const [searchText, setSearchText] = useState('');
   const [page, setPage] = useState(1);
+  const [sortByCreatedAt, setSortByCreatedAt] = useState(false);
+  const [sortByUpdatedAt, setSortByUpdatedAt] = useState(false);
 
   const token = localStorage.getItem('token');
   const userRole = localStorage.getItem('userRole');
   const userId = localStorage.getItem('userId');
 
   useEffect(() => {
-    getIncidents(searchText, page);
-  }, [searchText, page]);
+    getIncidents(searchText, page, sortByCreatedAt, sortByUpdatedAt);
+  }, [searchText, page, sortByCreatedAt, sortByUpdatedAt]);
 
-  const getIncidents = async (searchText?: string, page?: number) => {
+  const getIncidents = async (
+    searchText?: string,
+    page?: number,
+    sortByCreatedAt?: boolean,
+    sortByUpdatedAt?: boolean
+  ) => {
     if (token && userRole && userId) {
       const pageStr = page ? page.toString() : '1';
       const perPageStr = '10';
+
+      const sortByCreatedAtStr = sortByCreatedAt ? 'true' : 'false';
+      const sortByUpdatedAtStr = sortByUpdatedAt ? 'true' : 'false';
 
       const response = await incidentService.getIncidents(
         token,
@@ -55,7 +67,9 @@ function Dashboard() {
         userId,
         searchText,
         pageStr,
-        perPageStr
+        perPageStr,
+        sortByCreatedAtStr,
+        sortByUpdatedAtStr
       );
       console.log('response = ', response);
 
@@ -146,6 +160,14 @@ function Dashboard() {
     setPage(page);
   };
 
+  const handleSortByCreatedAt = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSortByCreatedAt(e.target.checked);
+  };
+
+  const handleSortByUpdatedAt = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSortByUpdatedAt(e.target.checked);
+  };
+
   return (
     <>
       <CustomAppBar />
@@ -184,6 +206,21 @@ function Dashboard() {
           showFirstButton
           showLastButton
         />
+
+        <div className="flex flex-row items-center">
+          <FormControlLabel
+            control={<Switch onChange={(e) => handleSortByCreatedAt(e)} />}
+            label={`Sort by Created At (${
+              sortByCreatedAt ? 'Ascending' : 'Descending'
+            })`}
+          />
+          <FormControlLabel
+            control={<Switch onChange={(e) => handleSortByUpdatedAt(e)} />}
+            label={`Sort by Updated At (${
+              sortByUpdatedAt ? 'Ascending' : 'Descending'
+            })`}
+          />
+        </div>
 
         <IncidentCardList incidents={incidents} getIncidents={getIncidents} />
 
