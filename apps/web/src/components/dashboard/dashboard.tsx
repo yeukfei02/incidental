@@ -141,7 +141,7 @@ function Dashboard() {
       </div>
 
       <div className="px-10">
-        <div className="flex justify-between">
+        <div className="flex items-center justify-between">
           <TextField
             className="w-2/6"
             id="outlined-basic"
@@ -151,6 +151,7 @@ function Dashboard() {
           />
           {userRole && userRole === UserRole.ADMIN ? (
             <Button
+              className="self-stretch"
               variant="outlined"
               onClick={handleCreateIncidentButtonClick}
             >
@@ -195,7 +196,7 @@ function Dashboard() {
                 required
                 fullWidth
                 multiline
-                rows={5}
+                minRows={5}
                 maxRows={10}
                 name="description"
                 label="Description"

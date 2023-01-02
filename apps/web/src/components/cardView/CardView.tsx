@@ -19,7 +19,13 @@ import CustomSnackBar from '../customSnackBar/CustomSnackBar';
 import { Incident, IncidentType, Status, User, UserRole } from '@prisma/client';
 import { useNavigate } from 'react-router-dom';
 import { Url } from '../../helper/url';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 import * as incidentService from '../../services/incidentService';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 interface Props {
   incident: Incident;
@@ -35,14 +41,14 @@ function CardView({ incident, normalUsers, getIncidents }: Props) {
   const [snackbarText, setSnackbarText] = useState('');
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
-  const [normalUser, setNormalUser] = useState('');
+  const [assigneeId, setAssigneeId] = useState('');
 
   const handleDialogClose = () => {
     setDialogOpen(false);
   };
 
-  const handleNormalUsersChange = (event: SelectChangeEvent) => {
-    setNormalUser(event.target.value as IncidentType);
+  const handleAssigneeChange = (event: SelectChangeEvent) => {
+    setAssigneeId(event.target.value as IncidentType);
   };
 
   const handleViewDetailsClick = () => {
@@ -74,7 +80,26 @@ function CardView({ incident, normalUsers, getIncidents }: Props) {
   };
 
   const handleAssignUser = async () => {
-    console.log('assign user api');
+    const token = localStorage.getItem('token');
+    if (token && incident) {
+      const response = await incidentService.assignIncident(
+        token,
+        incident.id,
+        assigneeId
+      );
+      console.log('response = ', response);
+
+      if (response) {
+        const responseData = response.data;
+        if (responseData) {
+          setDialogOpen(false);
+          setSnackbarOpen(true);
+          setSnackbarText('Assign incident');
+
+          await getIncidents();
+        }
+      }
+    }
   };
 
   const handleDeleteIncident = async () => {
@@ -166,6 +191,15 @@ function CardView({ incident, normalUsers, getIncidents }: Props) {
     return normalUsersDropdown;
   };
 
+  const getTimeDiffStr = () => {
+    const now = dayjs().tz('Asia/Hong_Kong');
+    const incidentCreatedDate = dayjs(incident.created_at).tz('Asia/Hong_Kong');
+
+    const minutesDiff = now.diff(incidentCreatedDate, 'minutes');
+    const timeDiffStr = `${minutesDiff} minutes ago`;
+    return timeDiffStr;
+  };
+
   return (
     <>
       <Card className="p-3 my-3">
@@ -215,6 +249,12 @@ function CardView({ incident, normalUsers, getIncidents }: Props) {
               />
             </div>
           </div>
+
+          <div className="mt-3">
+            <Typography className="italic" color="text.secondary" variant="subtitle2">
+              {getTimeDiffStr()}
+            </Typography>
+          </div>
         </CardContent>
         <CardActions>
           <Button
@@ -253,9 +293,9 @@ function CardView({ incident, normalUsers, getIncidents }: Props) {
                   <Select
                     labelId="demo-simple-select-helper-label"
                     id="demo-simple-select-helper"
-                    value={normalUser}
+                    value={assigneeId}
                     label="Incident Type"
-                    onChange={handleNormalUsersChange}
+                    onChange={handleAssigneeChange}
                   >
                     {renderNormalUsersDropdown()}
                   </Select>

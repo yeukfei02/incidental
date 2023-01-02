@@ -53,6 +53,9 @@ export class IncidentRepository {
             ],
           }),
         },
+        orderBy: {
+          created_at: 'desc',
+        },
         include: {
           creator: true,
           assignee: true,
@@ -78,6 +81,9 @@ export class IncidentRepository {
               },
             ],
           }),
+        },
+        orderBy: {
+          created_at: 'desc',
         },
         include: {
           creator: true,
@@ -109,6 +115,7 @@ export class IncidentRepository {
       },
       data: {
         assignee_id: assigneeId,
+        status: Status.ASSIGNED,
       },
       include: {
         creator: true,
