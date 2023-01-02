@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import CardView from '../cardView/CardView';
-import { Incident } from '@prisma/client';
+import { Incident, UserRole } from '@prisma/client';
 import * as userService from '../../services/userService';
 
 interface Props {
@@ -19,7 +19,8 @@ function IncidentCardList({ incidents, getIncidents }: Props) {
 
   const getNormalUsers = async () => {
     const token = localStorage.getItem('token');
-    if (token) {
+    const userRole = localStorage.getItem('userRole');
+    if (token && userRole && userRole === UserRole.ADMIN) {
       const response = await userService.getNormalUsers(token);
       console.log('response = ', response);
 

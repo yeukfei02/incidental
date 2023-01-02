@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { IncidentType, UserRole } from '@prisma/client';
+import { IncidentType, UserRole, Status } from '@prisma/client';
 import { IncidentRepository } from './incident.repository';
 
 @Injectable()
@@ -34,6 +34,22 @@ export class IncidentService {
 
   async getIncidentById(id: string) {
     const incident = await this.incidentRepository.findIncident(id);
+    return incident;
+  }
+
+  async assignIncident(id: string, assigneeId: string) {
+    const incident = await this.incidentRepository.assignIncident(
+      id,
+      assigneeId
+    );
+    return incident;
+  }
+
+  async updateIncidentStatus(id: string, status: Status) {
+    const incident = await this.incidentRepository.updateIncidentStatus(
+      id,
+      status
+    );
     return incident;
   }
 

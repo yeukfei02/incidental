@@ -194,6 +194,9 @@ function Dashboard() {
                 margin="normal"
                 required
                 fullWidth
+                multiline
+                rows={5}
+                maxRows={10}
                 name="description"
                 label="Description"
                 type="text"

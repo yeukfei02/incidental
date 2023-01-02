@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { UserRole, IncidentType } from '@prisma/client';
+import { UserRole, IncidentType, Status } from '@prisma/client';
 import { getRootUrl } from '../helper/helper';
 
 const rootUrl = getRootUrl();
@@ -55,6 +55,46 @@ export const getIncidentById = async (token: string, id: string) => {
       Authorization: `Bearer ${token}`,
     },
   });
+  return response;
+};
+
+export const assignIncident = async (
+  token: string,
+  id: string,
+  assigneeId: string
+) => {
+  const data = {
+    assigneeId: assigneeId,
+  };
+  const response = await axios.patch(
+    `${rootUrl}/incidents/${id}/assignIncident`,
+    data,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response;
+};
+
+export const updateIncidentStatus = async (
+  token: string,
+  id: string,
+  status: Status
+) => {
+  const data = {
+    status: status,
+  };
+  const response = await axios.patch(
+    `${rootUrl}/incidents/${id}/updateIncidentStatus`,
+    data,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
   return response;
 };
 
