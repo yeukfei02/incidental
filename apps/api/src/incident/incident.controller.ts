@@ -83,7 +83,7 @@ export class IncidentController {
     const incident = await this.incidentService.getIncidentById(id);
     if (incident) {
       response = {
-        message: 'get incident',
+        message: 'get incident by id',
         incident: incident,
       };
     }

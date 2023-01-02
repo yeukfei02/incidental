@@ -89,6 +89,8 @@ export class UserService {
         created_at: userFromDB.created_at,
         updated_at: userFromDB.updated_at,
         userRoles: userFromDB.userRoles,
+        creatorIncidents: userFromDB.creatorIncidents,
+        assigneeIncidents: userFromDB.assigneeIncidents,
       };
     }
 

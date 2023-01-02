@@ -147,6 +147,38 @@ function IncidentDetail() {
                 </Select>
               </FormControl>
             </div>
+            <div className="mt-1">
+              <TextField
+                margin="normal"
+                fullWidth
+                id="creator"
+                label="Creator"
+                name="creator"
+                type="text"
+                autoComplete="creator"
+                value={
+                  (incident as any) && (incident as any).creator
+                    ? (incident as any).creator.name
+                    : ''
+                }
+                disabled
+              />
+            </div>
+            <TextField
+              margin="normal"
+              fullWidth
+              id="assignee"
+              label="Assignee"
+              name="assignee"
+              type="text"
+              autoComplete="assignee"
+              value={
+                (incident as any) && (incident as any).assignee
+                  ? (incident as any).assignee.name
+                  : ''
+              }
+              disabled
+            />
             <Button
               fullWidth
               color="primary"
@@ -172,7 +204,7 @@ function IncidentDetail() {
         <CustomBreadcrumbs
           page="Incidents"
           subPage="Incident Detail"
-          incidentId={incident ? incident.id : ''}
+          incidentId={incident ? (incident as any).id : ''}
         />
       </div>
 

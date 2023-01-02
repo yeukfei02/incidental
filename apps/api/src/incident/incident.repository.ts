@@ -57,8 +57,26 @@ export class IncidentRepository {
           created_at: 'desc',
         },
         include: {
-          creator: true,
-          assignee: true,
+          creator: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              created_at: true,
+              updated_at: true,
+              userRoles: true,
+            },
+          },
+          assignee: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              created_at: true,
+              updated_at: true,
+              userRoles: true,
+            },
+          },
         },
       });
     } else if (userRole === UserRole.NORMAL_USER) {
@@ -86,8 +104,26 @@ export class IncidentRepository {
           created_at: 'desc',
         },
         include: {
-          creator: true,
-          assignee: true,
+          creator: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              created_at: true,
+              updated_at: true,
+              userRoles: true,
+            },
+          },
+          assignee: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              created_at: true,
+              updated_at: true,
+              userRoles: true,
+            },
+          },
         },
       });
     }
@@ -101,8 +137,26 @@ export class IncidentRepository {
         id: id,
       },
       include: {
-        creator: true,
-        assignee: true,
+        creator: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            created_at: true,
+            updated_at: true,
+            userRoles: true,
+          },
+        },
+        assignee: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            created_at: true,
+            updated_at: true,
+            userRoles: true,
+          },
+        },
       },
     });
     return incident;
@@ -118,8 +172,26 @@ export class IncidentRepository {
         status: Status.ASSIGNED,
       },
       include: {
-        creator: true,
-        assignee: true,
+        creator: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            created_at: true,
+            updated_at: true,
+            userRoles: true,
+          },
+        },
+        assignee: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            created_at: true,
+            updated_at: true,
+            userRoles: true,
+          },
+        },
       },
     });
     return incident;
@@ -134,8 +206,26 @@ export class IncidentRepository {
         status: status,
       },
       include: {
-        creator: true,
-        assignee: true,
+        creator: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            created_at: true,
+            updated_at: true,
+            userRoles: true,
+          },
+        },
+        assignee: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            created_at: true,
+            updated_at: true,
+            userRoles: true,
+          },
+        },
       },
     });
     return incident;
@@ -147,8 +237,26 @@ export class IncidentRepository {
         id: id,
       },
       include: {
-        creator: true,
-        assignee: true,
+        creator: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            created_at: true,
+            updated_at: true,
+            userRoles: true,
+          },
+        },
+        assignee: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            created_at: true,
+            updated_at: true,
+            userRoles: true,
+          },
+        },
       },
     });
     return incident;
