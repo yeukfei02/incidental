@@ -1,13 +1,15 @@
-import { Controller, Post, Get, Body, Param } from '@nestjs/common';
+import { Controller, Post, Get, Body, Param, Patch } from '@nestjs/common';
 import { UserService } from './user.service';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { SignupDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
+import { ChangePasswordDto } from './dto/changePassword.dto';
 import { SignupRes } from './interface/signup.interface';
 import { LoginRes } from './interface/login.interface';
 import { GetNormalUsersRes } from './interface/getNormalUsers.interface';
 import { GetUserByIdRes } from './interface/getUserById.interface';
+import { ChangePasswordRes } from './interface/changePassword.interface';
 
 @Controller('users')
 export class UserController {
@@ -89,6 +91,26 @@ export class UserController {
     if (user) {
       response = {
         message: 'get user by id',
+        user: user,
+      };
+    }
+
+    return response;
+  }
+
+  @Patch('/:id/changePassword')
+  async changePassword(
+    @Param('id') id: string,
+    @Body() changePasswordDto: ChangePasswordDto
+  ): Promise<ChangePasswordRes> {
+    let response: ChangePasswordRes;
+
+    const password = changePasswordDto.password;
+
+    const user = await this.userService.changePassword(id, password);
+    if (user) {
+      response = {
+        message: 'change password',
         user: user,
       };
     }

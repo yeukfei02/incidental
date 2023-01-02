@@ -48,3 +48,23 @@ export const getUserById = async (token: string, id: string) => {
   });
   return response;
 };
+
+export const changePassword = async (
+  token: string,
+  id: string,
+  password: string
+) => {
+  const data = {
+    password: password,
+  };
+  const response = await axios.patch(
+    `${rootUrl}/users/${id}/changePassword`,
+    data,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response;
+};

@@ -6,10 +6,15 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import CustomBreadcrumbs from '../customBreadcrumbs/CustomBreadcrumbs';
+import CustomSnackBar from '../customSnackBar/CustomSnackBar';
+import * as userService from '../../services/userService';
 
 function Settings() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+
+  const [snackbarText, setSnackbarText] = useState('');
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const handlePasswordChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -23,8 +28,30 @@ function Settings() {
     setConfirmPassword(e.target.value);
   };
 
-  const handleChangePasswordClick = () => {
-    console.log('change password api');
+  const handleChangePasswordClick = async () => {
+    const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('userId');
+    if (token && userId && password && confirmPassword) {
+      if (password === confirmPassword) {
+        const response = await userService.changePassword(
+          token,
+          userId,
+          password
+        );
+        console.log('response = ', response);
+
+        if (response) {
+          const responseData = response.data;
+          if (responseData) {
+            setSnackbarOpen(true);
+            setSnackbarText('Change password');
+
+            setPassword('');
+            setConfirmPassword('');
+          }
+        }
+      }
+    }
   };
 
   const renderSettingsView = () => {
@@ -85,6 +112,12 @@ function Settings() {
       </div>
 
       {renderSettingsView()}
+
+      <CustomSnackBar
+        type={snackbarText}
+        open={snackbarOpen}
+        setOpen={setSnackbarOpen}
+      />
     </>
   );
 }

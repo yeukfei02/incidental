@@ -57,12 +57,59 @@ export class UserService {
   }
 
   async getNormalUsers() {
+    let normalUsers = [];
+
     const users = await this.userRepository.findNormalUsers();
-    return users;
+    if (users) {
+      normalUsers = users.map((user) => {
+        const data = {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          created_at: user.created_at,
+          updated_at: user.updated_at,
+          userRoles: user.userRoles,
+        };
+        return data;
+      });
+    }
+
+    return normalUsers;
   }
 
   async getUserById(id: string) {
-    const user = await this.userRepository.findUserById(id);
+    let user = null;
+
+    const userFromDB = await this.userRepository.findUserById(id);
+    if (userFromDB) {
+      user = {
+        id: userFromDB.id,
+        name: userFromDB.name,
+        email: userFromDB.email,
+        created_at: userFromDB.created_at,
+        updated_at: userFromDB.updated_at,
+        userRoles: userFromDB.userRoles,
+      };
+    }
+
+    return user;
+  }
+
+  async changePassword(id: string, password: string) {
+    let user = null;
+
+    const userFromDB = await this.userRepository.changePassword(id, password);
+    if (userFromDB) {
+      user = {
+        id: userFromDB.id,
+        name: userFromDB.name,
+        email: userFromDB.email,
+        created_at: userFromDB.created_at,
+        updated_at: userFromDB.updated_at,
+        userRoles: userFromDB.userRoles,
+      };
+    }
+
     return user;
   }
 }

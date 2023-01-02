@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UserRole } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
+import bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UserRepository {
@@ -51,6 +52,20 @@ export class UserRepository {
       include: {
         creatorIncidents: true,
         assigneeIncidents: true,
+      },
+    });
+    return user;
+  }
+
+  async changePassword(id: string, password: string) {
+    const salt = bcrypt.genSaltSync(10);
+
+    const user = await this.prisma.user.update({
+      where: {
+        id: id,
+      },
+      data: {
+        password: bcrypt.hashSync(password, salt),
       },
     });
     return user;
