@@ -7,10 +7,11 @@ import { Url } from '../../helper/url';
 
 interface Props {
   page: string;
+  subPage?: string;
   incidentId?: string;
 }
 
-function CustomBreadcrumbs({ page, incidentId }: Props) {
+function CustomBreadcrumbs({ page, subPage, incidentId }: Props) {
   const navigate = useNavigate();
 
   const handlePageClick = (page: string) => {
@@ -42,7 +43,7 @@ function CustomBreadcrumbs({ page, incidentId }: Props) {
         separator={<NavigateNextIcon fontSize="small" />}
       >
         <div
-          className="cursor-pointer"
+          className="underline cursor-pointer"
           color="inherit"
           onClick={() => navigate(Url.HOME)}
         >
@@ -52,27 +53,27 @@ function CustomBreadcrumbs({ page, incidentId }: Props) {
       </Breadcrumbs>
     );
 
-    if (page === 'Incident Detail') {
+    if (subPage === 'Incident Detail') {
       breadCrumbs = (
         <Breadcrumbs
           aria-label="breadcrumb"
           separator={<NavigateNextIcon fontSize="small" />}
         >
           <div
-            className="cursor-pointer"
+            className="underline cursor-pointer"
             color="inherit"
             onClick={() => navigate(Url.HOME)}
           >
             Home
           </div>
           <div
-            className="cursor-pointer"
+            className="underline cursor-pointer"
             color="inherit"
             onClick={() => handlePageClick(page)}
           >
             {page}
           </div>
-          <Typography color="text.primary">{page}</Typography>
+          <Typography color="text.primary">{subPage}</Typography>
         </Breadcrumbs>
       );
     }

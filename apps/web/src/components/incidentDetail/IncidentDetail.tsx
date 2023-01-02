@@ -170,7 +170,8 @@ function IncidentDetail() {
 
       <div className="px-10 py-6">
         <CustomBreadcrumbs
-          page="Incident Detail"
+          page="Incidents"
+          subPage="Incident Detail"
           incidentId={incident ? incident.id : ''}
         />
       </div>
