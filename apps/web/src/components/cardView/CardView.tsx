@@ -43,6 +43,8 @@ function CardView({ incident, normalUsers, getIncidents }: Props) {
 
   const [assigneeId, setAssigneeId] = useState('');
 
+  const userRole = localStorage.getItem('userRole');
+
   const handleDialogClose = () => {
     setDialogOpen(false);
   };
@@ -124,19 +126,56 @@ function CardView({ incident, normalUsers, getIncidents }: Props) {
   };
 
   const handleAcknowledgeIncident = async () => {
-    console.log('acknowledge incident api');
+    const token = localStorage.getItem('token');
+    if (token && incident) {
+      const response = await incidentService.updateIncidentStatus(
+        token,
+        incident.id,
+        Status.ACKNOWLEDGED
+      );
+      console.log('response = ', response);
+
+      if (response) {
+        const responseData = response.data;
+        if (responseData) {
+          setDialogOpen(false);
+          setSnackbarOpen(true);
+          setSnackbarText('Acknowledge incident');
+
+          await getIncidents();
+        }
+      }
+    }
   };
 
   const handleResolveIncident = async () => {
-    console.log('resolve incident api');
+    const token = localStorage.getItem('token');
+    if (token && incident) {
+      const response = await incidentService.updateIncidentStatus(
+        token,
+        incident.id,
+        Status.RESOLVED
+      );
+      console.log('response = ', response);
+
+      if (response) {
+        const responseData = response.data;
+        if (responseData) {
+          setDialogOpen(false);
+          setSnackbarOpen(true);
+          setSnackbarText('Resolve incident');
+
+          await getIncidents();
+        }
+      }
+    }
   };
 
   const renderCardButton = () => {
     let cardButton;
 
-    const userRole = localStorage.getItem('userRole');
     if (userRole === UserRole.ADMIN) {
-      if (incident.status !== Status.ASSIGNED) {
+      if (incident.status === Status.UNASSIGNED) {
         cardButton = (
           <Button
             size="large"
@@ -149,26 +188,29 @@ function CardView({ incident, normalUsers, getIncidents }: Props) {
       }
     } else if (userRole === UserRole.NORMAL_USER) {
       cardButton = (
-        <>
-          {incident.status !== Status.ACKNOWLEDGED ? (
-            <Button
-              size="large"
-              color="primary"
-              onClick={() => handleAcknowledgeClick()}
-            >
-              Acknowledge
-            </Button>
-          ) : null}
-          {incident.status !== Status.RESOLVED ? (
-            <Button
-              size="large"
-              color="success"
-              onClick={() => handleResolveClick()}
-            >
-              Resolve
-            </Button>
-          ) : null}
-        </>
+        <Button
+          size="large"
+          color={
+            incident.status === Status.ASSIGNED
+              ? 'primary'
+              : incident.status === Status.ACKNOWLEDGED
+              ? 'success'
+              : 'primary'
+          }
+          onClick={
+            incident.status === Status.ASSIGNED
+              ? () => handleAcknowledgeClick()
+              : incident.status === Status.ACKNOWLEDGED
+              ? () => handleResolveClick()
+              : undefined
+          }
+        >
+          {incident.status === Status.ASSIGNED
+            ? 'Acknowledge'
+            : incident.status === Status.ACKNOWLEDGED
+            ? 'Resolve'
+            : ''}
+        </Button>
       );
     }
 
@@ -196,19 +238,31 @@ function CardView({ incident, normalUsers, getIncidents }: Props) {
     const incidentCreatedDate = dayjs(incident.created_at).tz('Asia/Hong_Kong');
 
     const minutesDiff = now.diff(incidentCreatedDate, 'minutes');
-    const timeDiffStr = `${minutesDiff} minutes ago`;
+    const hoursDiff = now.diff(incidentCreatedDate, 'hours');
+    
+    let timeDiffStr = '';
+    if (minutesDiff <= 60) {
+      timeDiffStr = `${minutesDiff} minutes ago`;
+    } else {
+      timeDiffStr = `${hoursDiff} hours ago`;
+    }
+
     return timeDiffStr;
   };
 
   return (
     <>
       <Card className="p-3 my-3">
-        <div className="flex justify-end m-1">
+        {
+          userRole && userRole === UserRole.ADMIN ?
+          <div className="flex justify-end m-1">
           <CloseIcon
             className="cursor-pointer"
             onClick={() => handleDeleteButtonClick()}
           />
-        </div>
+        </div>:
+        null
+        }
         <CardContent>
           <Typography variant="h5" component="div">
             {incident.title}
