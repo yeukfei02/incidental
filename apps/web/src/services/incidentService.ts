@@ -31,11 +31,13 @@ export const createIncident = async (
 export const getIncidents = async (
   token: string,
   userRole: UserRole,
-  userId: string
+  userId: string,
+  searchText?: string
 ) => {
   const params = {
     userRole: userRole,
     userId: userId,
+    ...(searchText && { searchText: searchText }),
   };
 
   const response = await axios.get(`${rootUrl}/incidents/list`, {

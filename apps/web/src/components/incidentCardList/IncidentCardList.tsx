@@ -19,15 +19,18 @@ function IncidentCardList({ token, userRole, userId, searchText }: Props) {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   useEffect(() => {
-    getIncidents();
-  }, []);
+    if (token && userRole && userId) {
+      getIncidents(searchText);
+    }
+  }, [token, userRole, userId, searchText]);
 
-  const getIncidents = async () => {
+  const getIncidents = async (searchText?: string) => {
     if (token && userRole && userId) {
       const response = await incidentService.getIncidents(
         token,
         userRole as UserRole,
-        userId
+        userId,
+        searchText
       );
       console.log('response = ', response);
 

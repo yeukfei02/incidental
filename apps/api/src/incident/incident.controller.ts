@@ -1,8 +1,9 @@
-import { Controller, Post, Body, Get, Query } from '@nestjs/common';
+import { Controller, Post, Body, Get, Query, Param } from '@nestjs/common';
 import { CreateIncidentDto } from './dto/createIncident.dto';
 import { IncidentService } from './incident.service';
 import { CreateIncidentRes } from './interface/createIncident.interface';
 import { GetIncidentsRes } from './interface/getIncidents.interface';
+import { GetIncidentRes } from './interface/getIncident.interface';
 import { UserRole } from '@prisma/client';
 
 @Controller('incidents')
@@ -41,15 +42,35 @@ export class IncidentController {
   @Get('/list')
   async getIncidents(
     @Query('userRole') userRole: UserRole,
-    @Query('userId') userId: string
+    @Query('userId') userId: string,
+    @Query('searchText') searchText?: string
   ) {
     let response: GetIncidentsRes;
 
-    const incidents = await this.incidentService.getIncidents(userRole, userId);
+    const incidents = await this.incidentService.getIncidents(
+      userRole,
+      userId,
+      searchText
+    );
     if (incidents) {
       response = {
         message: 'get incidents',
         incidents: incidents,
+      };
+    }
+
+    return response;
+  }
+
+  @Get('/:id')
+  async getIncident(@Param('id') id: string) {
+    let response: GetIncidentRes;
+
+    const incident = await this.incidentService.getIncidentById(id);
+    if (incident) {
+      response = {
+        message: 'get incident',
+        incident: incident,
       };
     }
 

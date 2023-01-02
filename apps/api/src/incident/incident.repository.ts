@@ -29,13 +29,27 @@ export class IncidentRepository {
     return incident;
   }
 
-  async getIncidents(userRole: UserRole, userId: string) {
+  async getIncidents(userRole: UserRole, userId: string, searchText?: string) {
     let incidents: Incident[];
 
     if (userRole === UserRole.ADMIN) {
       incidents = await this.prisma.incident.findMany({
         where: {
           creator_id: userId,
+          ...(searchText && {
+            OR: [
+              {
+                title: {
+                  contains: searchText,
+                },
+              },
+              {
+                description: {
+                  contains: searchText,
+                },
+              },
+            ],
+          }),
         },
         include: {
           creator: true,
@@ -55,5 +69,18 @@ export class IncidentRepository {
     }
 
     return incidents;
+  }
+
+  async getIncident(id: string) {
+    const incident = await this.prisma.incident.findUnique({
+      where: {
+        id: id,
+      },
+      include: {
+        creator: true,
+        assignee: true,
+      },
+    });
+    return incident;
   }
 }

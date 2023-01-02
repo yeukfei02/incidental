@@ -23,11 +23,17 @@ export class IncidentService {
     return incident;
   }
 
-  async getIncidents(userRole: UserRole, userId: string) {
+  async getIncidents(userRole: UserRole, userId: string, searchText?: string) {
     const incidents = await this.incidentRepository.getIncidents(
       userRole,
-      userId
+      userId,
+      searchText
     );
     return incidents;
+  }
+
+  async getIncidentById(id: string) {
+    const incident = await this.incidentRepository.getIncident(id);
+    return incident;
   }
 }
