@@ -42,4 +42,17 @@ export class UserRepository {
     });
     return users;
   }
+
+  async findUserById(id: string) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: id,
+      },
+      include: {
+        creatorIncidents: true,
+        assigneeIncidents: true,
+      },
+    });
+    return user;
+  }
 }

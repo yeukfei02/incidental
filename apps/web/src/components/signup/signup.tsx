@@ -13,7 +13,6 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { UserRole } from '@prisma/client';
 import CustomSnackBar from '../customSnackBar/CustomSnackBar';
@@ -38,8 +37,6 @@ function Copyright(props: CopyrightProps) {
     </Typography>
   );
 }
-
-const theme = createTheme();
 
 function Signup() {
   const navigate = useNavigate();
@@ -85,7 +82,7 @@ function Signup() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         <Grid
@@ -178,6 +175,7 @@ function Signup() {
               <Button
                 type="submit"
                 fullWidth
+                color="primary"
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
@@ -202,7 +200,7 @@ function Signup() {
       </Grid>
 
       <CustomSnackBar type="Signup" open={open} setOpen={setOpen} />
-    </ThemeProvider>
+    </>
   );
 }
 

@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Body } from '@nestjs/common';
+import { Controller, Post, Get, Body, Param } from '@nestjs/common';
 import { UserService } from './user.service';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -7,6 +7,7 @@ import { LoginDto } from './dto/login.dto';
 import { SignupRes } from './interface/signup.interface';
 import { LoginRes } from './interface/login.interface';
 import { GetNormalUsersRes } from './interface/getNormalUsers.interface';
+import { GetUserByIdRes } from './interface/getUserById.interface';
 
 @Controller('users')
 export class UserController {
@@ -74,6 +75,21 @@ export class UserController {
       response = {
         message: 'get normal users',
         users: users,
+      };
+    }
+
+    return response;
+  }
+
+  @Get('/:id')
+  async getUserById(@Param('id') id: string): Promise<GetUserByIdRes> {
+    let response: GetUserByIdRes;
+
+    const user = await this.userService.getUserById(id);
+    if (user) {
+      response = {
+        message: 'get user by id',
+        user: user,
       };
     }
 

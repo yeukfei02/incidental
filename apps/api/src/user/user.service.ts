@@ -60,4 +60,9 @@ export class UserService {
     const users = await this.userRepository.findNormalUsers();
     return users;
   }
+
+  async getUserById(id: string) {
+    const user = await this.userRepository.findUserById(id);
+    return user;
+  }
 }
