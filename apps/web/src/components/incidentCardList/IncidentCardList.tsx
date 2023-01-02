@@ -20,6 +20,8 @@ function IncidentCardList({ incidents }: Props) {
     const token = localStorage.getItem('token');
     if (token) {
       const response = await userService.getNormalUsers(token);
+      console.log('response = ', response);
+
       if (response) {
         const responseData = response.data;
         if (responseData) {

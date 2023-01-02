@@ -58,11 +58,13 @@ function CardView({ incident, normalUsers }: Props) {
   };
 
   const handleAcknowledgeClick = () => {
-    console.log('acknowledge');
+    setDialogOpen(true);
+    setDialogText('Acknowledge');
   };
 
   const handleResolveClick = () => {
-    console.log('resolve');
+    setDialogOpen(true);
+    setDialogText('Resolve');
   };
 
   const handleAssignUser = async () => {
@@ -73,37 +75,51 @@ function CardView({ incident, normalUsers }: Props) {
     console.log('delete incident api');
   };
 
+  const handleAcknowledgeIncident = async () => {
+    console.log('acknowledge incident api');
+  };
+
+  const handleResolveIncident = async () => {
+    console.log('resolve incident api');
+  };
+
   const renderCardButton = () => {
     let cardButton;
 
     const userRole = localStorage.getItem('userRole');
     if (userRole === UserRole.ADMIN) {
-      cardButton = (
-        <Button
-          size="large"
-          color="primary"
-          onClick={() => handleAssignClick()}
-        >
-          Assign
-        </Button>
-      );
+      if (incident.status !== Status.ASSIGNED) {
+        cardButton = (
+          <Button
+            size="large"
+            color="primary"
+            onClick={() => handleAssignClick()}
+          >
+            Assign
+          </Button>
+        );
+      }
     } else if (userRole === UserRole.NORMAL_USER) {
       cardButton = (
         <>
-          <Button
-            size="large"
-            color="primary"
-            onClick={() => handleAcknowledgeClick()}
-          >
-            Acknowledge
-          </Button>
-          <Button
-            size="large"
-            color="primary"
-            onClick={() => handleResolveClick()}
-          >
-            Resolve
-          </Button>
+          {incident.status !== Status.ACKNOWLEDGED ? (
+            <Button
+              size="large"
+              color="primary"
+              onClick={() => handleAcknowledgeClick()}
+            >
+              Acknowledge
+            </Button>
+          ) : null}
+          {incident.status !== Status.RESOLVED ? (
+            <Button
+              size="large"
+              color="success"
+              onClick={() => handleResolveClick()}
+            >
+              Resolve
+            </Button>
+          ) : null}
         </>
       );
     }
@@ -218,7 +234,17 @@ function CardView({ incident, normalUsers }: Props) {
               </div>
             </Box>
           ) : dialogText === 'Delete Incident' ? (
-            <div>Are you sure want to remove this incident?</div>
+            <Typography color="text.secondary" variant="body1">
+              Are you sure want to remove this incident?
+            </Typography>
+          ) : dialogText === 'Acknowledge' ? (
+            <Typography color="text.secondary" variant="body1">
+              Are you sure want to acknowledge this incident?
+            </Typography>
+          ) : dialogText === 'Resolve' ? (
+            <Typography color="text.secondary" variant="body1">
+              Are you sure want to resolve this incident?
+            </Typography>
           ) : null}
         </DialogContent>
         <DialogActions>
@@ -231,6 +257,10 @@ function CardView({ incident, normalUsers }: Props) {
                 ? () => handleAssignUser()
                 : dialogText === 'Delete Incident'
                 ? () => handleDeleteIncident()
+                : dialogText === 'Acknowledge'
+                ? () => handleAcknowledgeIncident()
+                : dialogText === 'Resolve'
+                ? () => handleResolveIncident()
                 : undefined
             }
           >

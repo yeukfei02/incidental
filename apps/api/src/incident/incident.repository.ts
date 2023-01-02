@@ -41,11 +41,13 @@ export class IncidentRepository {
               {
                 title: {
                   contains: searchText,
+                  mode: 'insensitive',
                 },
               },
               {
                 description: {
                   contains: searchText,
+                  mode: 'insensitive',
                 },
               },
             ],
@@ -65,11 +67,13 @@ export class IncidentRepository {
               {
                 title: {
                   contains: searchText,
+                  mode: 'insensitive',
                 },
               },
               {
                 description: {
                   contains: searchText,
+                  mode: 'insensitive',
                 },
               },
             ],

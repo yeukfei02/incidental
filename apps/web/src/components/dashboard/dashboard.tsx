@@ -146,6 +146,7 @@ function Dashboard() {
         <IncidentCardList incidents={incidents} />
 
         <Dialog
+          fullWidth
           open={dialogOpen}
           onClose={handleDialogClose}
           aria-labelledby="alert-dialog-title"
