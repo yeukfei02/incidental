@@ -141,12 +141,20 @@ function Login() {
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link component="button" onClick={() => navigate(Url.HOME)} variant="body2">
+                  <Link
+                    component="button"
+                    onClick={() => navigate(Url.HOME)}
+                    variant="body2"
+                  >
                     Forgot password?
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link component="button" onClick={() => navigate(Url.SIGN_UP)} variant="body2">
+                  <Link
+                    component="button"
+                    onClick={() => navigate(Url.SIGN_UP)}
+                    variant="body2"
+                  >
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>
