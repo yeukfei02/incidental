@@ -42,10 +42,10 @@ function Signup() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
-  const [userRoles, setUserRoles] = useState<UserRole>(UserRole.NORMAL_USER);
+  const [userRole, setUserRole] = useState<UserRole>(UserRole.NORMAL_USER);
 
   const handleUserRolesChange = (event: SelectChangeEvent) => {
-    setUserRoles(event.target.value as UserRole);
+    setUserRole(event.target.value as UserRole);
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -56,7 +56,7 @@ function Signup() {
       const name = data.get('name');
       const email = data.get('email');
       const password = data.get('password');
-      if (name && email && password && userRoles) {
+      if (name && email && password && userRole) {
         const nameStr = name as string;
         const emailStr = email as string;
         const passwordStr = password as string;
@@ -64,7 +64,7 @@ function Signup() {
           nameStr,
           emailStr,
           passwordStr,
-          [userRoles]
+          [userRole]
         );
         console.log('response = ', response);
 
@@ -161,7 +161,7 @@ function Signup() {
                   <Select
                     labelId="demo-simple-select-helper-label"
                     id="demo-simple-select-helper"
-                    value={userRoles}
+                    value={userRole}
                     label="User Roles"
                     onChange={handleUserRolesChange}
                   >

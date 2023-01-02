@@ -10,15 +10,19 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { User, UserRole } from '@prisma/client';
-import * as userService from '../../services/userService';
 import CustomBreadcrumbs from '../customBreadcrumbs/CustomBreadcrumbs';
+import CustomSnackBar from '../customSnackBar/CustomSnackBar';
+import * as userService from '../../services/userService';
 
 function Profile() {
   const [user, setUser] = useState<User>();
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [userRoles, setUserRoles] = useState<UserRole>(UserRole.NORMAL_USER);
+  const [userRole, setUserRole] = useState<UserRole>(UserRole.NORMAL_USER);
+
+  const [snackbarText, setSnackbarText] = useState('');
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   useEffect(() => {
     getUserById();
@@ -37,7 +41,7 @@ function Profile() {
           setUser(responseData.user);
           setName(responseData.user.name);
           setEmail(responseData.user.email);
-          setUserRoles(responseData.user.userRoles);
+          setUserRole(responseData.user.userRoles[0]);
         }
       }
     }
@@ -56,11 +60,29 @@ function Profile() {
   };
 
   const handleUserRolesChange = (event: SelectChangeEvent) => {
-    setUserRoles(event.target.value as UserRole);
+    setUserRole(event.target.value as UserRole);
   };
 
-  const handleUpdateUserClick = () => {
-    console.log('update user api');
+  const handleUpdateUserClick = async () => {
+    const token = localStorage.getItem('token');
+    if (token && user && name && email && userRole) {
+      const response = await userService.updateUserById(
+        token,
+        user.id,
+        name,
+        email,
+        userRole
+      );
+      console.log('response = ', response);
+
+      if (response) {
+        const responseData = response.data;
+        if (responseData) {
+          setSnackbarOpen(true);
+          setSnackbarText('Update user by id');
+        }
+      }
+    }
   };
 
   const renderProfileView = () => {
@@ -107,7 +129,7 @@ function Profile() {
                 <Select
                   labelId="demo-simple-select-helper-label"
                   id="demo-simple-select-helper"
-                  value={userRoles}
+                  value={userRole}
                   label="User Roles"
                   onChange={handleUserRolesChange}
                 >
@@ -142,6 +164,12 @@ function Profile() {
       </div>
 
       {renderProfileView()}
+
+      <CustomSnackBar
+        type={snackbarText}
+        open={snackbarOpen}
+        setOpen={setSnackbarOpen}
+      />
     </>
   );
 }

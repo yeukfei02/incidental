@@ -5,11 +5,13 @@ import jwt from 'jsonwebtoken';
 import { SignupDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
 import { ChangePasswordDto } from './dto/changePassword.dto';
+import { UpdateUserByIdDto } from './dto/updateUserById.dto';
 import { SignupRes } from './interface/signup.interface';
 import { LoginRes } from './interface/login.interface';
 import { GetNormalUsersRes } from './interface/getNormalUsers.interface';
 import { GetUserByIdRes } from './interface/getUserById.interface';
 import { ChangePasswordRes } from './interface/changePassword.interface';
+import { UpdateUserByIdRes } from './interface/updateUserById.interface';
 
 @Controller('users')
 export class UserController {
@@ -91,6 +93,33 @@ export class UserController {
     if (user) {
       response = {
         message: 'get user by id',
+        user: user,
+      };
+    }
+
+    return response;
+  }
+
+  @Patch('/:id')
+  async updateUserById(
+    @Param('id') id: string,
+    @Body() updateUserByIdDto: UpdateUserByIdDto
+  ): Promise<UpdateUserByIdRes> {
+    let response: UpdateUserByIdRes;
+
+    const name = updateUserByIdDto.name;
+    const email = updateUserByIdDto.email;
+    const userRole = updateUserByIdDto.userRole;
+
+    const user = await this.userService.updateUserById(
+      id,
+      name,
+      email,
+      userRole
+    );
+    if (user) {
+      response = {
+        message: 'update user by id',
         user: user,
       };
     }

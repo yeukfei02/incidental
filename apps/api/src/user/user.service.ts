@@ -95,6 +95,34 @@ export class UserService {
     return user;
   }
 
+  async updateUserById(
+    id: string,
+    name: string,
+    email: string,
+    userRole: UserRole
+  ) {
+    let user = null;
+
+    const userFromDB = await this.userRepository.updateUserById(
+      id,
+      name,
+      email,
+      userRole
+    );
+    if (userFromDB) {
+      user = {
+        id: userFromDB.id,
+        name: userFromDB.name,
+        email: userFromDB.email,
+        created_at: userFromDB.created_at,
+        updated_at: userFromDB.updated_at,
+        userRoles: userFromDB.userRoles,
+      };
+    }
+
+    return user;
+  }
+
   async changePassword(id: string, password: string) {
     let user = null;
 

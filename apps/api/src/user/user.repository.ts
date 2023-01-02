@@ -57,6 +57,25 @@ export class UserRepository {
     return user;
   }
 
+  async updateUserById(
+    id: string,
+    name: string,
+    email: string,
+    userRole: UserRole
+  ) {
+    const user = await this.prisma.user.update({
+      where: {
+        id: id,
+      },
+      data: {
+        name: name,
+        email: email,
+        userRoles: [userRole],
+      },
+    });
+    return user;
+  }
+
   async changePassword(id: string, password: string) {
     const salt = bcrypt.genSaltSync(10);
 
