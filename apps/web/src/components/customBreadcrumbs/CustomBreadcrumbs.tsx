@@ -41,7 +41,11 @@ function CustomBreadcrumbs({ page, incidentId }: Props) {
         aria-label="breadcrumb"
         separator={<NavigateNextIcon fontSize="small" />}
       >
-        <div className="cursor-pointer" color="inherit" onClick={() => navigate(Url.HOME)}>
+        <div
+          className="cursor-pointer"
+          color="inherit"
+          onClick={() => navigate(Url.HOME)}
+        >
           Home
         </div>
         <Typography color="text.primary">{page}</Typography>
@@ -54,10 +58,18 @@ function CustomBreadcrumbs({ page, incidentId }: Props) {
           aria-label="breadcrumb"
           separator={<NavigateNextIcon fontSize="small" />}
         >
-          <div className="cursor-pointer" color="inherit" onClick={() => navigate(Url.HOME)}>
+          <div
+            className="cursor-pointer"
+            color="inherit"
+            onClick={() => navigate(Url.HOME)}
+          >
             Home
           </div>
-          <div className="cursor-pointer" color="inherit" onClick={() => handlePageClick(page)}>
+          <div
+            className="cursor-pointer"
+            color="inherit"
+            onClick={() => handlePageClick(page)}
+          >
             {page}
           </div>
           <Typography color="text.primary">{page}</Typography>
