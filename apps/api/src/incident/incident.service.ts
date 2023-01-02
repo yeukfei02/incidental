@@ -24,7 +24,7 @@ export class IncidentService {
   }
 
   async getIncidents(userRole: UserRole, userId: string, searchText?: string) {
-    const incidents = await this.incidentRepository.getIncidents(
+    const incidents = await this.incidentRepository.findIncidents(
       userRole,
       userId,
       searchText
@@ -33,7 +33,7 @@ export class IncidentService {
   }
 
   async getIncidentById(id: string) {
-    const incident = await this.incidentRepository.getIncident(id);
+    const incident = await this.incidentRepository.findIncident(id);
     return incident;
   }
 }

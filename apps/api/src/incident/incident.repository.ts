@@ -29,7 +29,7 @@ export class IncidentRepository {
     return incident;
   }
 
-  async getIncidents(userRole: UserRole, userId: string, searchText?: string) {
+  async findIncidents(userRole: UserRole, userId: string, searchText?: string) {
     let incidents: Incident[];
 
     if (userRole === UserRole.ADMIN) {
@@ -71,7 +71,7 @@ export class IncidentRepository {
     return incidents;
   }
 
-  async getIncident(id: string) {
+  async findIncident(id: string) {
     const incident = await this.prisma.incident.findUnique({
       where: {
         id: id,

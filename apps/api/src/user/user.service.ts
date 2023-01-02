@@ -47,4 +47,9 @@ export class UserService {
 
     return user;
   }
+
+  async getNormalUsers() {
+    const users = await this.userRepository.findNormalUsers();
+    return users;
+  }
 }

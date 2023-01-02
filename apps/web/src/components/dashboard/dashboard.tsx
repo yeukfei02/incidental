@@ -30,7 +30,7 @@ function Dashboard() {
 
   const token = localStorage.getItem('token');
   const userRole = localStorage.getItem('userRole');
-  const creatorId = localStorage.getItem('userId');
+  const userId = localStorage.getItem('userId');
 
   const handleTitleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -68,7 +68,7 @@ function Dashboard() {
       title &&
       description &&
       incidentType &&
-      creatorId &&
+      userId &&
       userRole &&
       userRole === UserRole.ADMIN
     ) {
@@ -77,7 +77,7 @@ function Dashboard() {
         title,
         description,
         incidentType,
-        creatorId,
+        userId,
         userRole as UserRole
       );
       console.log('response = ', response);
@@ -117,7 +117,7 @@ function Dashboard() {
         <IncidentCardList
           token={token}
           userRole={userRole}
-          userId={creatorId}
+          userId={userId}
           searchText={searchText}
         />
 

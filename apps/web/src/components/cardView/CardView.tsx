@@ -1,13 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
+import Box from '@mui/material/Box';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import { Incident, IncidentType, Status, UserRole } from '@prisma/client';
 import { useNavigate } from 'react-router-dom';
 import { Url } from '../../helper/url';
+import * as userService from '../../services/userService';
+import * as incidentService from '../../services/incidentService';
 
 interface Props {
   incident: Incident;
@@ -15,6 +26,35 @@ interface Props {
 
 function CardView({ incident }: Props) {
   const navigate = useNavigate();
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const [normalUsers, setNormalUsers] = useState([]);
+  const [normalUser, setNormalUser] = useState('');
+
+  useEffect(() => {
+    getNormalUsers();
+  }, []);
+
+  const getNormalUsers = async () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const response = await userService.getNormalUsers(token);
+      if (response) {
+        const responseData = response.data;
+        if (responseData) {
+          setNormalUsers(responseData.users);
+        }
+      }
+    }
+  };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
+
+  const handleNormalUsersChange = (event: SelectChangeEvent) => {
+    setNormalUser(event.target.value as IncidentType);
+  };
 
   const handleViewDetailsClick = () => {
     navigate(Url.INCIDENT_DETAIL.replace(':id', incident.id), {
@@ -25,7 +65,7 @@ function CardView({ incident }: Props) {
   };
 
   const handleAssignClick = () => {
-    console.log('assign');
+    setDialogOpen(true);
   };
 
   const handleAcknowledgeClick = () => {
@@ -34,6 +74,10 @@ function CardView({ incident }: Props) {
 
   const handleResolveClick = () => {
     console.log('resolve');
+  };
+
+  const handleAssignUser = async () => {
+    console.log('assign user api');
   };
 
   const renderCardButton = () => {
@@ -74,60 +118,114 @@ function CardView({ incident }: Props) {
     return cardButton;
   };
 
+  const renderNormalUsersDropdown = () => {
+    let normalUsersDropdown;
+
+    if (normalUsers) {
+      normalUsersDropdown = normalUsers.map((user: any, i) => {
+        return (
+          <MenuItem key={i} value={user.id}>
+            {user.name}
+          </MenuItem>
+        );
+      });
+    }
+
+    return normalUsersDropdown;
+  };
+
   return (
-    <Card className="p-3 my-3">
-      <CardContent>
-        <Typography variant="h5" component="div">
-          {incident.title}
-        </Typography>
-        <div className="my-4">
-          <Typography color="text.secondary" variant="body2">
-            {incident.description}
+    <>
+      <Card className="p-3 my-3">
+        <CardContent>
+          <Typography variant="h5" component="div">
+            {incident.title}
           </Typography>
-        </div>
-        <div className="flex flex-row items-center">
-          <div>
-            <Chip
-              label={incident.type}
-              color={
-                incident.type === IncidentType.HIGH
-                  ? 'error'
-                  : incident.type === IncidentType.MEDIUM
-                  ? 'warning'
-                  : 'info'
-              }
-            />
+          <div className="my-4">
+            <Typography color="text.secondary" variant="body2">
+              {incident.description}
+            </Typography>
           </div>
-          <div className="mx-2">
-            <Chip
-              label={incident.status}
-              color={
-                incident.status === Status.UNASSIGNED
-                  ? 'warning'
-                  : incident.status === Status.ASSIGNED
-                  ? 'primary'
-                  : incident.status === Status.ACKNOWLEDGED
-                  ? 'info'
-                  : incident.status === Status.RESOLVED
-                  ? 'success'
-                  : 'default'
-              }
-              variant="outlined"
-            />
+          <div className="flex flex-row items-center">
+            <div>
+              <Chip
+                label={incident.type}
+                color={
+                  incident.type === IncidentType.HIGH
+                    ? 'error'
+                    : incident.type === IncidentType.MEDIUM
+                    ? 'warning'
+                    : 'info'
+                }
+              />
+            </div>
+            <div className="mx-2">
+              <Chip
+                label={incident.status}
+                color={
+                  incident.status === Status.UNASSIGNED
+                    ? 'warning'
+                    : incident.status === Status.ASSIGNED
+                    ? 'primary'
+                    : incident.status === Status.ACKNOWLEDGED
+                    ? 'info'
+                    : incident.status === Status.RESOLVED
+                    ? 'success'
+                    : 'default'
+                }
+                variant="outlined"
+              />
+            </div>
           </div>
-        </div>
-      </CardContent>
-      <CardActions>
-        <Button
-          size="large"
-          color="secondary"
-          onClick={() => handleViewDetailsClick()}
-        >
-          View Details
-        </Button>
-        {renderCardButton()}
-      </CardActions>
-    </Card>
+        </CardContent>
+        <CardActions>
+          <Button
+            size="large"
+            color="secondary"
+            onClick={() => handleViewDetailsClick()}
+          >
+            View Details
+          </Button>
+          {renderCardButton()}
+        </CardActions>
+      </Card>
+
+      <Dialog
+        fullWidth
+        open={dialogOpen}
+        onClose={handleDialogClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">Assign User</DialogTitle>
+        <DialogContent>
+          <Box>
+            <div>
+              <FormControl className="w-full">
+                <InputLabel id="demo-simple-select-helper-label">
+                  Normal Users
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-helper-label"
+                  id="demo-simple-select-helper"
+                  value={normalUser}
+                  label="Incident Type"
+                  onChange={handleNormalUsersChange}
+                >
+                  {renderNormalUsersDropdown()}
+                </Select>
+              </FormControl>
+            </div>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button color="secondary" onClick={handleDialogClose}>
+            Cancel
+          </Button>
+          <Button onClick={() => handleAssignUser()}>Assign User</Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 }
 

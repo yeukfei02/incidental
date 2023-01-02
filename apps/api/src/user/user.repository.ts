@@ -25,4 +25,15 @@ export class UserRepository {
     });
     return user;
   }
+
+  async findNormalUsers() {
+    const users = await this.prisma.user.findMany({
+      where: {
+        userRoles: {
+          hasEvery: [UserRole.NORMAL_USER],
+        },
+      },
+    });
+    return users;
+  }
 }

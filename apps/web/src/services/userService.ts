@@ -28,3 +28,12 @@ export const login = async (email: string, password: string) => {
   const response = await axios.post(`${rootUrl}/users/login`, data);
   return response;
 };
+
+export const getNormalUsers = async (token: string) => {
+  const response = await axios.get(`${rootUrl}/users/list/normalUsers`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response;
+};

@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Get, Body } from '@nestjs/common';
 import { UserService } from './user.service';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -6,6 +6,7 @@ import { SignupDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
 import { SignupRes } from './interface/signup.interface';
 import { LoginRes } from './interface/login.interface';
+import { GetNormalUsersRes } from './interface/getNormalUsers.interface';
 
 @Controller('users')
 export class UserController {
@@ -56,6 +57,21 @@ export class UserController {
         message: 'login',
         user: user,
         token: token,
+      };
+    }
+
+    return response;
+  }
+
+  @Get('/list/normalUsers')
+  async getNormalUsers(): Promise<GetNormalUsersRes> {
+    let response: GetNormalUsersRes;
+
+    const users = await this.userService.getNormalUsers();
+    if (users) {
+      response = {
+        message: 'get normal users',
+        users: users,
       };
     }
 
