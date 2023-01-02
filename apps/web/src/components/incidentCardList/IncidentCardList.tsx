@@ -7,9 +7,10 @@ import * as userService from '../../services/userService';
 
 interface Props {
   incidents: Incident[];
+  getIncidents: () => Promise<void>;
 }
 
-function IncidentCardList({ incidents }: Props) {
+function IncidentCardList({ incidents, getIncidents }: Props) {
   const [normalUsers, setNormalUsers] = useState([]);
 
   useEffect(() => {
@@ -38,7 +39,7 @@ function IncidentCardList({ incidents }: Props) {
       incidentCardList = incidents.map((incident, i) => {
         return (
           <Grid key={i} item xs={12} sm={4} className="p-3">
-            <CardView incident={incident} normalUsers={normalUsers} />
+            <CardView incident={incident} normalUsers={normalUsers} getIncidents={getIncidents} />
           </Grid>
         );
       });

@@ -39,3 +39,12 @@ export const getNormalUsers = async (token: string) => {
   });
   return response;
 };
+
+export const getUserById = async (token: string, id: string) => {
+  const response = await axios.get(`${rootUrl}/users/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response;
+};

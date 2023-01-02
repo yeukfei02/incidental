@@ -1,6 +1,6 @@
 import { Incident } from '@prisma/client';
 
-export interface GetIncidentRes {
+export interface GetIncidentByIdRes {
   message: string;
   incident: Incident;
 }

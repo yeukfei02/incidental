@@ -143,7 +143,7 @@ function Dashboard() {
           ) : null}
         </div>
 
-        <IncidentCardList incidents={incidents} />
+        <IncidentCardList incidents={incidents} getIncidents={getIncidents} />
 
         <Dialog
           fullWidth

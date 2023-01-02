@@ -1,9 +1,19 @@
-import { Controller, Post, Body, Get, Query, Param } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Patch,
+  Delete,
+  Query,
+  Param,
+} from '@nestjs/common';
 import { CreateIncidentDto } from './dto/createIncident.dto';
 import { IncidentService } from './incident.service';
 import { CreateIncidentRes } from './interface/createIncident.interface';
 import { GetIncidentsRes } from './interface/getIncidents.interface';
-import { GetIncidentRes } from './interface/getIncident.interface';
+import { GetIncidentByIdRes } from './interface/getIncidentById.interface';
+import { DeleteIncidentByIdRes } from './interface/deleteIncidentById.interface';
 import { UserRole } from '@prisma/client';
 
 @Controller('incidents')
@@ -63,13 +73,28 @@ export class IncidentController {
   }
 
   @Get('/:id')
-  async getIncident(@Param('id') id: string) {
-    let response: GetIncidentRes;
+  async getIncidentById(@Param('id') id: string) {
+    let response: GetIncidentByIdRes;
 
     const incident = await this.incidentService.getIncidentById(id);
     if (incident) {
       response = {
         message: 'get incident',
+        incident: incident,
+      };
+    }
+
+    return response;
+  }
+
+  @Delete('/:id')
+  async deleteIncidentById(@Param('id') id: string) {
+    let response: DeleteIncidentByIdRes;
+
+    const incident = await this.incidentService.deleteIncidentById(id);
+    if (incident) {
+      response = {
+        message: 'delete incident by id',
         incident: incident,
       };
     }

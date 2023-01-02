@@ -48,3 +48,21 @@ export const getIncidents = async (
   });
   return response;
 };
+
+export const getIncidentById = async (token: string, id: string) => {
+  const response = await axios.get(`${rootUrl}/incidents/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response;
+};
+
+export const deleteIncidentById = async (token: string, id: string) => {
+  const response = await axios.delete(`${rootUrl}/incidents/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response;
+};

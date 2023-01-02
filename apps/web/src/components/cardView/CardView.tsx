@@ -15,19 +15,25 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import CloseIcon from '@mui/icons-material/Close';
+import CustomSnackBar from '../customSnackBar/CustomSnackBar';
 import { Incident, IncidentType, Status, User, UserRole } from '@prisma/client';
 import { useNavigate } from 'react-router-dom';
 import { Url } from '../../helper/url';
+import * as incidentService from '../../services/incidentService';
 
 interface Props {
   incident: Incident;
   normalUsers: User[];
+  getIncidents: () => Promise<void>;
 }
 
-function CardView({ incident, normalUsers }: Props) {
+function CardView({ incident, normalUsers, getIncidents }: Props) {
   const navigate = useNavigate();
   const [dialogText, setDialogText] = useState('');
   const [dialogOpen, setDialogOpen] = useState(false);
+
+  const [snackbarText, setSnackbarText] = useState('');
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const [normalUser, setNormalUser] = useState('');
 
@@ -72,7 +78,24 @@ function CardView({ incident, normalUsers }: Props) {
   };
 
   const handleDeleteIncident = async () => {
-    console.log('delete incident api');
+    const token = localStorage.getItem('token');
+    if (token) {
+      const response = await incidentService.deleteIncidentById(
+        token,
+        incident.id
+      );
+      console.log('response = ', response);
+
+      if (response) {
+        const responseData = response.data;
+        if (responseData) {
+          setDialogOpen(false);
+          setSnackbarOpen(true);
+          setSnackbarText('Delete Incident');
+          await getIncidents();
+        }
+      }
+    }
   };
 
   const handleAcknowledgeIncident = async () => {
@@ -268,6 +291,12 @@ function CardView({ incident, normalUsers }: Props) {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <CustomSnackBar
+        type={snackbarText}
+        open={snackbarOpen}
+        setOpen={setSnackbarOpen}
+      />
     </>
   );
 }

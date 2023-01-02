@@ -101,4 +101,17 @@ export class IncidentRepository {
     });
     return incident;
   }
+
+  async deleteIncidentById(id: string) {
+    const incident = await this.prisma.incident.delete({
+      where: {
+        id: id,
+      },
+      include: {
+        creator: true,
+        assignee: true,
+      },
+    });
+    return incident;
+  }
 }
