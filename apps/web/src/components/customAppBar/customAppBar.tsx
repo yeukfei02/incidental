@@ -53,13 +53,6 @@ function CustomAppBar() {
           >
             Incidents
           </span>
-          <span
-            color="text.primary"
-            className="mx-3 cursor-pointer"
-            onClick={() => handleGoToPath(Url.SETTINGS)}
-          >
-            Settings
-          </span>
         </nav>
         <div>
           <IconButton

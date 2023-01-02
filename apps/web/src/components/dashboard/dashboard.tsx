@@ -6,6 +6,7 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
+import CloseIcon from '@mui/icons-material/Close';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -83,6 +84,10 @@ function Dashboard() {
     setDialogOpen(false);
   };
 
+  const handleDeleteButtonClick = () => {
+    setDialogOpen(false);
+  };
+
   const handleSearchTextChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -115,6 +120,11 @@ function Dashboard() {
           setDialogOpen(false);
           setSnackbarOpen(true);
           setSnackbarText('Create incident');
+
+          setTitle('');
+          setDescription('');
+          setIncidentType(IncidentType.MEDIUM);
+          
           await getIncidents(searchText);
         }
       }
@@ -152,6 +162,12 @@ function Dashboard() {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
+          <div className="flex justify-end m-4">
+            <CloseIcon
+              className="cursor-pointer"
+              onClick={() => handleDeleteButtonClick()}
+            />
+          </div>
           <DialogTitle id="alert-dialog-title">Create Incident</DialogTitle>
           <DialogContent>
             <Box>

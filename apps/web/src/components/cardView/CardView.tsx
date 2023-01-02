@@ -235,6 +235,12 @@ function CardView({ incident, normalUsers, getIncidents }: Props) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
+        <div className="flex justify-end m-4">
+          <CloseIcon
+            className="cursor-pointer"
+            onClick={() => handleDialogClose()}
+          />
+        </div>
         <DialogTitle id="alert-dialog-title">{dialogText}</DialogTitle>
         <DialogContent>
           {dialogText === 'Assign User' ? (

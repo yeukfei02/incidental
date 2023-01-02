@@ -21,7 +21,7 @@ async function createUsers() {
 
   const users = [
     {
-      name: faker.name.fullName(),
+      name: 'Admin',
       email: 'admin@admin.com',
       password: bcrypt.hashSync('admin', salt),
       userRoles: UserRole.ADMIN,
