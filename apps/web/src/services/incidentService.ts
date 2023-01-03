@@ -34,32 +34,31 @@ export const getIncidents = async (
   userId: string,
   searchText?: string,
   incidentType?: IncidentType,
-  pageStr?: string,
-  perPageStr?: string,
-  sortByCreatedAtStr?: string,
-  sortByUpdatedAtStr?: string
+  page?: number,
+  perPage?: number,
+  sortByCreatedAt?: boolean,
+  sortByUpdatedAt?: boolean
 ) => {
-  const params = {
+  const data = {
     userRole: userRole,
     userId: userId,
     ...(searchText && { searchText: searchText }),
     ...(incidentType && { incidentType: incidentType }),
-    ...(pageStr && {
-      page: pageStr,
+    ...(page && {
+      page: page,
     }),
-    ...(perPageStr && {
-      perPage: perPageStr,
+    ...(perPage && {
+      perPage: perPage,
     }),
-    ...(sortByCreatedAtStr && {
-      sortByCreatedAt: sortByCreatedAtStr,
+    ...(sortByCreatedAt && {
+      sortByCreatedAt: sortByCreatedAt,
     }),
-    ...(sortByUpdatedAtStr && {
-      sortByUpdatedAt: sortByUpdatedAtStr,
+    ...(sortByUpdatedAt && {
+      sortByUpdatedAt: sortByUpdatedAt,
     }),
   };
 
-  const response = await axios.get(`${rootUrl}/incidents/list`, {
-    params: params,
+  const response = await axios.post(`${rootUrl}/incidents/list`, data, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

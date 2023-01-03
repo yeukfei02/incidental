@@ -60,11 +60,8 @@ function Dashboard() {
     sortByUpdatedAt?: boolean
   ) => {
     if (token && userRole && userId) {
-      const pageStr = page ? page.toString() : '1';
-      const perPageStr = '10';
-
-      const sortByCreatedAtStr = sortByCreatedAt ? 'true' : 'false';
-      const sortByUpdatedAtStr = sortByUpdatedAt ? 'true' : 'false';
+      const pageInt = page ? page : 1;
+      const perPage = 10;
 
       const response = await incidentService.getIncidents(
         token,
@@ -72,10 +69,10 @@ function Dashboard() {
         userId,
         searchText,
         incidentType,
-        pageStr,
-        perPageStr,
-        sortByCreatedAtStr,
-        sortByUpdatedAtStr
+        pageInt,
+        perPage,
+        sortByCreatedAt,
+        sortByUpdatedAt
       );
       console.log('response = ', response);
 
@@ -166,7 +163,7 @@ function Dashboard() {
 
           setTitle('');
           setDescription('');
-          setIncidentType(IncidentType.MEDIUM);
+          setIncidentType(undefined);
 
           await getIncidents(searchText);
         }

@@ -34,13 +34,13 @@ export class IncidentRepository {
     userId: string,
     searchText?: string,
     incidentType?: IncidentType,
-    page?: string,
-    perPage?: string,
+    page?: number,
+    perPage?: number,
     sortByCreatedAt?: string,
     sortByUpdatedAt?: string
   ) {
-    const pageInt = page ? parseInt(page, 10) : 1;
-    const perPageInt = perPage ? parseInt(perPage, 10) : 10;
+    const pageInt = page ? page : 1;
+    const perPageInt = perPage ? perPage : 10;
 
     const incidents = await this.prisma.incident.findMany({
       where: {

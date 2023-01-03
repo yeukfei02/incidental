@@ -28,8 +28,8 @@ export class IncidentService {
     userId: string,
     searchText?: string,
     incidentType?: IncidentType,
-    page?: string,
-    perPage?: string,
+    page?: number,
+    perPage?: number,
     sortByCreatedAt?: string,
     sortByUpdatedAt?: string
   ) {

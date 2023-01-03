@@ -9,6 +9,7 @@ import {
   Param,
 } from '@nestjs/common';
 import { CreateIncidentDto } from './dto/createIncident.dto';
+import { GetIncidentsDto } from './dto/getIncidents.dto';
 import { UpdateIncidentStatusDto } from './dto/updateIncidentStatus.dto';
 import { AssignIncidentStatusDto } from './dto/assignIncidentStatus.dto';
 import { IncidentService } from './incident.service';
@@ -53,18 +54,22 @@ export class IncidentController {
     return response;
   }
 
-  @Get('/list')
+  @Post('/list')
   async getIncidents(
-    @Query('userRole') userRole: UserRole,
-    @Query('userId') userId: string,
-    @Query('searchText') searchText?: string,
-    @Query('incidentType') incidentType?: IncidentType,
-    @Query('page') page?: string,
-    @Query('perPage') perPage?: string,
-    @Query('sortByCreatedAt') sortByCreatedAt?: string,
-    @Query('sortByUpdatedAt') sortByUpdatedAt?: string
+    @Body() getIncidentsDto: GetIncidentsDto
   ): Promise<GetIncidentsRes> {
     let response: GetIncidentsRes;
+
+    const userRole = getIncidentsDto.userRole;
+    const userId = getIncidentsDto.userId;
+    const searchText = getIncidentsDto.searchText;
+    const incidentType = getIncidentsDto.incidentType;
+    const page = getIncidentsDto.page ? getIncidentsDto.page : 1;
+    const perPage = getIncidentsDto.perPage
+      ? getIncidentsDto.perPage
+      : 10;
+    const sortByCreatedAt = getIncidentsDto.sortByCreatedAt ? 'true' : 'false';
+    const sortByUpdatedAt = getIncidentsDto.sortByUpdatedAt ? 'true' : 'false';
 
     const incidents = await this.incidentService.getIncidents(
       userRole,
@@ -83,19 +88,16 @@ export class IncidentController {
       );
     console.log('allIncidents.length = ', allIncidents.length);
 
-    const pageInt = page ? parseInt(page, 10) : 1;
-    const perPageInt = perPage ? parseInt(perPage, 10) : 10;
-
     if (incidents) {
       response = {
         message: 'get incidents',
         incidents: incidents,
         total: incidents.length,
-        page: pageInt,
-        perPage: perPageInt,
+        page: page,
+        perPage: perPage,
         totalPageCount:
           allIncidents && allIncidents.length > 0
-            ? Math.floor(allIncidents.length / perPageInt) || 1
+            ? Math.floor(allIncidents.length / perPage) || 1
             : 1,
       };
     }
