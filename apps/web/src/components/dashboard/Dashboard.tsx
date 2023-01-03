@@ -26,6 +26,8 @@ function Dashboard() {
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [createIncidentIncidentType, setCreateIncidentIncidentType] =
+    useState<IncidentType>();
   const [incidentType, setIncidentType] = useState<IncidentType>();
 
   const [incidents, setIncidents] = useState([]);
@@ -101,6 +103,10 @@ function Dashboard() {
     setDescription(e.target.value);
   };
 
+  const handleCreateIncidentIncidentTypeChange = (event: SelectChangeEvent) => {
+    setCreateIncidentIncidentType(event.target.value as IncidentType);
+  };
+
   const handleIncidentTypeChange = (event: SelectChangeEvent) => {
     setIncidentType(event.target.value as IncidentType);
   };
@@ -136,7 +142,7 @@ function Dashboard() {
       token &&
       title &&
       description &&
-      incidentType &&
+      createIncidentIncidentType &&
       userId &&
       userRole &&
       userRole === UserRole.ADMIN
@@ -145,7 +151,7 @@ function Dashboard() {
         token,
         title,
         description,
-        incidentType,
+        createIncidentIncidentType,
         userId,
         userRole as UserRole
       );
@@ -270,9 +276,13 @@ function Dashboard() {
                   <Select
                     labelId="demo-simple-select-helper-label"
                     id="demo-simple-select-helper"
-                    value={incidentType ? incidentType : ''}
+                    value={
+                      createIncidentIncidentType
+                        ? createIncidentIncidentType
+                        : ''
+                    }
                     label="Incident Type"
-                    onChange={handleIncidentTypeChange}
+                    onChange={handleCreateIncidentIncidentTypeChange}
                   >
                     <MenuItem value={IncidentType.HIGH}>High</MenuItem>
                     <MenuItem value={IncidentType.MEDIUM}>Medium</MenuItem>
