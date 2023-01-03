@@ -2,11 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import Card from '@mui/material/Card';
 import FormControl from '@mui/material/FormControl';
-import Pagination from '@mui/material/Pagination';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
@@ -21,7 +17,7 @@ import CustomAppBar from '../customAppBar/CustomAppBar';
 import { IncidentType, UserRole } from '@prisma/client';
 import * as incidentService from '../../services/incidentService';
 import CustomBreadcrumbs from '../customBreadcrumbs/CustomBreadcrumbs';
-import { Typography } from '@mui/material';
+import SearchAndFilter from '../searchAndFilter/SearchAndFilter';
 
 function Dashboard() {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -198,36 +194,15 @@ function Dashboard() {
           ) : null}
         </div>
 
-        <Card className="p-5 mt-5">
-          <Typography variant="h5">
-            <span className="font-bold">Search and Filter</span>
-          </Typography>
-          <Pagination
-            className="my-5"
-            count={totalPageCount}
-            page={page}
-            onChange={handlePageChange}
-            variant="outlined"
-            color="primary"
-            showFirstButton
-            showLastButton
-          />
-
-          <div className="flex flex-row items-center">
-            <FormControlLabel
-              control={<Switch onChange={(e) => handleSortByCreatedAt(e)} />}
-              label={`Sort by Created At (${
-                sortByCreatedAt ? 'Ascending' : 'Descending'
-              })`}
-            />
-            <FormControlLabel
-              control={<Switch onChange={(e) => handleSortByUpdatedAt(e)} />}
-              label={`Sort by Updated At (${
-                sortByUpdatedAt ? 'Ascending' : 'Descending'
-              })`}
-            />
-          </div>
-        </Card>
+        <SearchAndFilter
+          totalPageCount={totalPageCount}
+          page={page}
+          handlePageChange={handlePageChange}
+          handleSortByCreatedAt={handleSortByCreatedAt}
+          handleSortByUpdatedAt={handleSortByUpdatedAt}
+          sortByCreatedAt={sortByCreatedAt}
+          sortByUpdatedAt={sortByUpdatedAt}
+        />
 
         <IncidentCardList incidents={incidents} getIncidents={getIncidents} />
 
