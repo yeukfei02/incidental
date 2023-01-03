@@ -11,13 +11,14 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { useParams } from 'react-router';
 import * as incidentService from '../../services/incidentService';
-import { Incident, IncidentType, Status } from '@prisma/client';
+import { IncidentType, Status } from '@prisma/client';
+import { IncidentRes } from '../../interface/getIncidentById.interface';
 import CustomBreadcrumbs from '../customBreadcrumbs/CustomBreadcrumbs';
 
 function IncidentDetail() {
   const { id } = useParams();
 
-  const [incident, setIncident] = useState<Incident>();
+  const [incident, setIncident] = useState<IncidentRes>();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [incidentType, setIncidentType] = useState<IncidentType>(
@@ -157,9 +158,7 @@ function IncidentDetail() {
                 type="text"
                 autoComplete="creator"
                 value={
-                  (incident as any) && (incident as any).creator
-                    ? (incident as any).creator.name
-                    : ''
+                  incident && incident.creator ? incident.creator.name : ''
                 }
                 disabled
               />
@@ -173,9 +172,7 @@ function IncidentDetail() {
               type="text"
               autoComplete="assignee"
               value={
-                (incident as any) && (incident as any).assignee
-                  ? (incident as any).assignee.name
-                  : ''
+                incident && incident.assignee ? incident.assignee.name : ''
               }
               disabled
             />
@@ -204,7 +201,7 @@ function IncidentDetail() {
         <CustomBreadcrumbs
           page="Incidents"
           subPage="Incident Detail"
-          incidentId={incident ? (incident as any).id : ''}
+          incidentId={incident ? incident.id : ''}
         />
       </div>
 
