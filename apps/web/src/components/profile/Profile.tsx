@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { User } from '@prisma/client';
+import { User, UserRole } from '@prisma/client';
 import CustomBreadcrumbs from '../customBreadcrumbs/CustomBreadcrumbs';
 import CustomSnackBar from '../customSnackBar/CustomSnackBar';
 import * as userService from '../../services/userService';
@@ -15,6 +15,7 @@ function Profile() {
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [userRoles, setUserRoles] = useState<UserRole[]>([]);
 
   const [snackbarText, setSnackbarText] = useState('');
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -36,6 +37,7 @@ function Profile() {
           setUser(responseData.user);
           setName(responseData.user.name);
           setEmail(responseData.user.email);
+          setUserRoles(responseData.user.userRoles);
         }
       }
     }
@@ -109,6 +111,17 @@ function Profile() {
               autoComplete="email"
               value={email}
               onChange={(e) => handleEmailChange(e)}
+            />
+            <TextField
+              margin="normal"
+              fullWidth
+              id="userRoles"
+              label="User Role"
+              name="userRoles"
+              type="text"
+              autoComplete="userRoles"
+              value={userRoles ? userRoles[0] : ''}
+              disabled
             />
             <Button
               fullWidth
