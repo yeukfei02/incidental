@@ -42,6 +42,32 @@ export class IncidentRepository {
     const pageInt = page ? page : 1;
     const perPageInt = perPage ? perPage : 10;
 
+    const orderBy: unknown[] = [
+      ...(sortByCreatedAt
+        ? [
+            {
+              created_at: sortByCreatedAt === 'true' ? 'asc' : 'desc',
+            },
+          ]
+        : [
+            {
+              created_at: 'desc',
+            },
+          ]),
+      ...(sortByUpdatedAt
+        ? [
+            {
+              updated_at: sortByUpdatedAt === 'true' ? 'asc' : 'desc',
+            },
+          ]
+        : [
+            {
+              updated_at: 'desc',
+            },
+          ]),
+    ];
+    console.log('orderBy = ', orderBy);
+
     const incidents = await this.prisma.incident.findMany({
       where: {
         ...(userRole === UserRole.ADMIN && {
@@ -72,20 +98,7 @@ export class IncidentRepository {
           },
         }),
       },
-      orderBy: [
-        {
-          created_at:
-            sortByCreatedAt && sortByCreatedAt === 'true'
-              ? 'asc'
-              : 'desc' || 'desc',
-        },
-        {
-          updated_at:
-            sortByUpdatedAt && sortByUpdatedAt === 'true'
-              ? 'asc'
-              : 'desc' || 'desc',
-        },
-      ],
+      orderBy: orderBy,
       skip: pageInt > 1 ? pageInt * perPageInt - perPageInt : 0,
       take: perPageInt,
       include: {
