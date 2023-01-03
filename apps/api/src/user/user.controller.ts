@@ -1,6 +1,5 @@
 import { Controller, Post, Get, Body, Param, Patch } from '@nestjs/common';
 import { UserService } from './user.service';
-import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { SignupDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
@@ -21,20 +20,7 @@ export class UserController {
   async signup(@Body() signupDto: SignupDto): Promise<SignupRes> {
     let response: SignupRes;
 
-    const name = signupDto.name;
-    const email = signupDto.email;
-
-    const salt = bcrypt.genSaltSync(10);
-    const hashedPassword = bcrypt.hashSync(signupDto.password, salt);
-
-    const userRoles = signupDto.userRoles;
-
-    const user = await this.userService.signup(
-      name,
-      email,
-      hashedPassword,
-      userRoles
-    );
+    const user = await this.userService.signup(signupDto);
     if (user) {
       response = {
         message: 'signup',
@@ -49,10 +35,7 @@ export class UserController {
   async login(@Body() loginDto: LoginDto): Promise<LoginRes> {
     let response: LoginRes;
 
-    const email = loginDto.email;
-    const password = loginDto.password;
-
-    const user = await this.userService.login(email, password);
+    const user = await this.userService.login(loginDto);
     if (user) {
       const token = jwt.sign(
         { id: user.id, email: user.email },
@@ -107,10 +90,7 @@ export class UserController {
   ): Promise<UpdateUserByIdRes> {
     let response: UpdateUserByIdRes;
 
-    const name = updateUserByIdDto.name;
-    const email = updateUserByIdDto.email;
-
-    const user = await this.userService.updateUserById(id, name, email);
+    const user = await this.userService.updateUserById(id, updateUserByIdDto);
     if (user) {
       response = {
         message: 'update user by id',
@@ -128,9 +108,7 @@ export class UserController {
   ): Promise<ChangePasswordRes> {
     let response: ChangePasswordRes;
 
-    const password = changePasswordDto.password;
-
-    const user = await this.userService.changePassword(id, password);
+    const user = await this.userService.changePassword(id, changePasswordDto);
     if (user) {
       response = {
         message: 'change password',

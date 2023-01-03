@@ -31,18 +31,8 @@ export class IncidentController {
   ): Promise<CreateIncidentRes> {
     let response: CreateIncidentRes;
 
-    const title = createIncidentDto.title;
-    const description = createIncidentDto.description;
-    const type = createIncidentDto.type;
-    const creatorId = createIncidentDto.creatorId;
-    const userRole = createIncidentDto.userRole;
-
     const incident = await this.incidentService.createIncident(
-      title,
-      description,
-      type,
-      creatorId,
-      userRole
+      createIncidentDto
     );
     if (incident) {
       response = {
@@ -62,23 +52,10 @@ export class IncidentController {
 
     const userRole = getIncidentsDto.userRole;
     const userId = getIncidentsDto.userId;
-    const searchText = getIncidentsDto.searchText;
-    const incidentType = getIncidentsDto.incidentType;
     const page = getIncidentsDto.page ? getIncidentsDto.page : 1;
     const perPage = getIncidentsDto.perPage ? getIncidentsDto.perPage : 10;
-    const sortByCreatedAt = getIncidentsDto.sortByCreatedAt ? 'true' : 'false';
-    const sortByUpdatedAt = getIncidentsDto.sortByUpdatedAt ? 'true' : 'false';
 
-    const incidents = await this.incidentService.getIncidents(
-      userRole,
-      userId,
-      searchText,
-      incidentType,
-      page,
-      perPage,
-      sortByCreatedAt,
-      sortByUpdatedAt
-    );
+    const incidents = await this.incidentService.getIncidents(getIncidentsDto);
     const allIncidents =
       await this.incidentService.getAllIncidentsByUserRoleAndUserId(
         userRole,
@@ -125,9 +102,10 @@ export class IncidentController {
   ): Promise<AssignIncidentRes> {
     let response: AssignIncidentRes;
 
-    const assigneeId = assignIncidentStatusDto.assigneeId;
-
-    const incident = await this.incidentService.assignIncident(id, assigneeId);
+    const incident = await this.incidentService.assignIncident(
+      id,
+      assignIncidentStatusDto
+    );
     if (incident) {
       response = {
         message: 'update incident status',
@@ -145,11 +123,9 @@ export class IncidentController {
   ): Promise<UpdateIncidentStatusRes> {
     let response: UpdateIncidentStatusRes;
 
-    const status = updateIncidentStatusDto.status;
-
     const incident = await this.incidentService.updateIncidentStatus(
       id,
-      status
+      updateIncidentStatusDto
     );
     if (incident) {
       response = {
@@ -168,17 +144,9 @@ export class IncidentController {
   ): Promise<UpdateIncidentByIdRes> {
     let response: UpdateIncidentByIdRes;
 
-    const title = updateIncidentByIdDto.title;
-    const description = updateIncidentByIdDto.description;
-    const incidentType = updateIncidentByIdDto.incidentType;
-    const status = updateIncidentByIdDto.status;
-
     const incident = await this.incidentService.updateIncidentById(
       id,
-      title,
-      description,
-      incidentType,
-      status
+      updateIncidentByIdDto
     );
     if (incident) {
       response = {

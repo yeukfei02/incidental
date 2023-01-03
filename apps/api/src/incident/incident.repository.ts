@@ -1,19 +1,24 @@
 import { Injectable } from '@nestjs/common';
-import { Incident, IncidentType, UserRole, Status } from '@prisma/client';
+import { Incident, UserRole, Status } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
+import { AssignIncidentStatusDto } from './dto/assignIncidentStatus.dto';
+import { CreateIncidentDto } from './dto/createIncident.dto';
+import { GetIncidentsDto } from './dto/getIncidents.dto';
+import { UpdateIncidentByIdDto } from './dto/updateIncidentById.dto';
+import { UpdateIncidentStatusDto } from './dto/updateIncidentStatus.dto';
 
 @Injectable()
 export class IncidentRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createIncident(
-    title: string,
-    description: string,
-    type: IncidentType,
-    creatorId: string,
-    userRole: UserRole
-  ) {
+  async createIncident(createIncidentDto: CreateIncidentDto) {
     let incident: Incident;
+
+    const title = createIncidentDto.title;
+    const description = createIncidentDto.description;
+    const type = createIncidentDto.type;
+    const creatorId = createIncidentDto.creatorId;
+    const userRole = createIncidentDto.userRole;
 
     if (userRole === UserRole.ADMIN) {
       incident = await this.prisma.incident.create({
@@ -29,16 +34,16 @@ export class IncidentRepository {
     return incident;
   }
 
-  async findIncidents(
-    userRole: UserRole,
-    userId: string,
-    searchText?: string,
-    incidentType?: IncidentType,
-    page?: number,
-    perPage?: number,
-    sortByCreatedAt?: string,
-    sortByUpdatedAt?: string
-  ) {
+  async findIncidents(getIncidentsDto: GetIncidentsDto) {
+    const userRole = getIncidentsDto.userRole;
+    const userId = getIncidentsDto.userId;
+    const searchText = getIncidentsDto.searchText;
+    const incidentType = getIncidentsDto.incidentType;
+    const page = getIncidentsDto.page ? getIncidentsDto.page : 1;
+    const perPage = getIncidentsDto.perPage ? getIncidentsDto.perPage : 10;
+    const sortByCreatedAt = getIncidentsDto.sortByCreatedAt ? 'true' : 'false';
+    const sortByUpdatedAt = getIncidentsDto.sortByUpdatedAt ? 'true' : 'false';
+
     const pageInt = page ? page : 1;
     const perPageInt = perPage ? perPage : 10;
 
@@ -176,7 +181,12 @@ export class IncidentRepository {
     return incident;
   }
 
-  async assignIncident(id: string, assigneeId: string) {
+  async assignIncident(
+    id: string,
+    assignIncidentStatusDto: AssignIncidentStatusDto
+  ) {
+    const assigneeId = assignIncidentStatusDto.assigneeId;
+
     const incident = await this.prisma.incident.update({
       where: {
         id: id,
@@ -212,7 +222,12 @@ export class IncidentRepository {
     return incident;
   }
 
-  async updateIncidentStatus(id: string, status: Status) {
+  async updateIncidentStatus(
+    id: string,
+    updateIncidentStatusDto: UpdateIncidentStatusDto
+  ) {
+    const status = updateIncidentStatusDto.status;
+
     const incident = await this.prisma.incident.update({
       where: {
         id: id,
@@ -249,11 +264,13 @@ export class IncidentRepository {
 
   async updateIncidentById(
     id: string,
-    title: string,
-    description: string,
-    incidentType: IncidentType,
-    status: Status
+    updateIncidentByIdDto: UpdateIncidentByIdDto
   ) {
+    const title = updateIncidentByIdDto.title;
+    const description = updateIncidentByIdDto.description;
+    const incidentType = updateIncidentByIdDto.incidentType;
+    const status = updateIncidentByIdDto.status;
+
     const incident = await this.prisma.incident.update({
       where: {
         id: id,

@@ -2,22 +2,28 @@ import { Injectable } from '@nestjs/common';
 import { UserRole } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
 import bcrypt from 'bcryptjs';
+import { SignupDto } from './dto/signup.dto';
+import { UpdateUserByIdDto } from './dto/updateUserById.dto';
+import { ChangePasswordDto } from './dto/changePassword.dto';
 
 @Injectable()
 export class UserRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createUser(
-    name: string,
-    email: string,
-    password: string,
-    userRoles: UserRole[]
-  ) {
+  async createUser(signupDto: SignupDto) {
+    const name = signupDto.name;
+    const email = signupDto.email;
+
+    const salt = bcrypt.genSaltSync(10);
+    const hashedPassword = bcrypt.hashSync(signupDto.password, salt);
+
+    const userRoles = signupDto.userRoles;
+
     const user = await this.prisma.user.create({
       data: {
         name: name,
         email: email,
-        password: password,
+        password: hashedPassword,
         userRoles: userRoles,
       },
     });
@@ -57,7 +63,10 @@ export class UserRepository {
     return user;
   }
 
-  async updateUserById(id: string, name: string, email: string) {
+  async updateUserById(id: string, updateUserByIdDto: UpdateUserByIdDto) {
+    const name = updateUserByIdDto.name;
+    const email = updateUserByIdDto.email;
+
     const user = await this.prisma.user.update({
       where: {
         id: id,
@@ -71,7 +80,9 @@ export class UserRepository {
     return user;
   }
 
-  async changePassword(id: string, password: string) {
+  async changePassword(id: string, changePasswordDto: ChangePasswordDto) {
+    const password = changePasswordDto.password;
+
     const salt = bcrypt.genSaltSync(10);
 
     const user = await this.prisma.user.update({
