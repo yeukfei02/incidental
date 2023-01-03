@@ -5,7 +5,6 @@ import {
   Get,
   Patch,
   Delete,
-  Query,
   Param,
 } from '@nestjs/common';
 import { CreateIncidentDto } from './dto/createIncident.dto';
@@ -19,7 +18,6 @@ import { GetIncidentByIdRes } from './interface/getIncidentById.interface';
 import { DeleteIncidentByIdRes } from './interface/deleteIncidentById.interface';
 import { UpdateIncidentStatusRes } from './interface/updateIncidentStatus.interface';
 import { AssignIncidentRes } from './interface/assignIncident.interface';
-import { UserRole, IncidentType } from '@prisma/client';
 
 @Controller('incidents')
 export class IncidentController {
@@ -65,9 +63,7 @@ export class IncidentController {
     const searchText = getIncidentsDto.searchText;
     const incidentType = getIncidentsDto.incidentType;
     const page = getIncidentsDto.page ? getIncidentsDto.page : 1;
-    const perPage = getIncidentsDto.perPage
-      ? getIncidentsDto.perPage
-      : 10;
+    const perPage = getIncidentsDto.perPage ? getIncidentsDto.perPage : 10;
     const sortByCreatedAt = getIncidentsDto.sortByCreatedAt ? 'true' : 'false';
     const sortByUpdatedAt = getIncidentsDto.sortByUpdatedAt ? 'true' : 'false';
 
