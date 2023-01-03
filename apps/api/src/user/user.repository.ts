@@ -91,6 +91,7 @@ export class UserRepository {
       },
       data: {
         password: bcrypt.hashSync(password, salt),
+        updated_at: new Date(),
       },
     });
     return user;
