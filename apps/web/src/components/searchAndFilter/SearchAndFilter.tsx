@@ -44,7 +44,7 @@ function SearchAndFilter({
   handleClearFilterClick,
 }: Props) {
   return (
-    <Card className="p-5 mt-5">
+    <Card className="mt-5 p-7">
       <Typography variant="h5">
         <span className="font-bold">Search and Filter</span>
       </Typography>
@@ -111,7 +111,7 @@ function SearchAndFilter({
         <Button
           className="w-full"
           color="primary"
-          variant="contained"
+          variant="outlined"
           onClick={() => handleClearFilterClick()}
         >
           Clear Filter
