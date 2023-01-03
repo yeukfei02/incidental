@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="200px" src="https://github.com/yeukfei02/incidental/blob/main/readme-icon.png"><br/>
+  <img width="300px" src="https://github.com/yeukfei02/incidental/blob/main/readme-icon.png"><br/>
   <h2 align="center">incidental</h2>
 </p>
 

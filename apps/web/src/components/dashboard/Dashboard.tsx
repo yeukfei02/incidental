@@ -26,9 +26,7 @@ function Dashboard() {
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [incidentType, setIncidentType] = useState<IncidentType>(
-    IncidentType.MEDIUM
-  );
+  const [incidentType, setIncidentType] = useState<IncidentType>();
 
   const [incidents, setIncidents] = useState([]);
   const [totalPageCount, setTotalPageCount] = useState(0);
@@ -43,11 +41,18 @@ function Dashboard() {
   const userId = localStorage.getItem('userId');
 
   useEffect(() => {
-    getIncidents(searchText, page, sortByCreatedAt, sortByUpdatedAt);
-  }, [searchText, page, sortByCreatedAt, sortByUpdatedAt]);
+    getIncidents(
+      searchText,
+      incidentType,
+      page,
+      sortByCreatedAt,
+      sortByUpdatedAt
+    );
+  }, [searchText, incidentType, page, sortByCreatedAt, sortByUpdatedAt]);
 
   const getIncidents = async (
     searchText?: string,
+    incidentType?: IncidentType,
     page?: number,
     sortByCreatedAt?: boolean,
     sortByUpdatedAt?: boolean
@@ -64,6 +69,7 @@ function Dashboard() {
         userRole as UserRole,
         userId,
         searchText,
+        incidentType,
         pageStr,
         perPageStr,
         sortByCreatedAtStr,
@@ -115,6 +121,14 @@ function Dashboard() {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setSearchText(e.target.value);
+  };
+
+  const handleClearFilterClick = () => {
+    setSearchText('');
+    setIncidentType(undefined);
+    setPage(1);
+    setSortByCreatedAt(false);
+    setSortByUpdatedAt(false);
   };
 
   const handleCreateIncident = async () => {
@@ -175,14 +189,7 @@ function Dashboard() {
       </div>
 
       <div className="px-10">
-        <div className="flex items-center justify-between">
-          <TextField
-            className="w-2/6"
-            id="outlined-basic"
-            label="Search"
-            variant="outlined"
-            onChange={(e) => handleSearchTextChange(e)}
-          />
+        <div className="flex justify-end">
           {userRole && userRole === UserRole.ADMIN ? (
             <Button
               className="self-stretch"
@@ -195,13 +202,18 @@ function Dashboard() {
         </div>
 
         <SearchAndFilter
-          totalPageCount={totalPageCount}
+          searchText={searchText}
+          incidentType={incidentType}
           page={page}
+          sortByCreatedAt={sortByCreatedAt}
+          sortByUpdatedAt={sortByUpdatedAt}
+          totalPageCount={totalPageCount}
           handlePageChange={handlePageChange}
           handleSortByCreatedAt={handleSortByCreatedAt}
           handleSortByUpdatedAt={handleSortByUpdatedAt}
-          sortByCreatedAt={sortByCreatedAt}
-          sortByUpdatedAt={sortByUpdatedAt}
+          handleIncidentTypeChange={handleIncidentTypeChange}
+          handleSearchTextChange={handleSearchTextChange}
+          handleClearFilterClick={handleClearFilterClick}
         />
 
         <IncidentCardList incidents={incidents} getIncidents={getIncidents} />

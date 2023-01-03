@@ -33,6 +33,7 @@ export class IncidentRepository {
     userRole: UserRole,
     userId: string,
     searchText?: string,
+    incidentType?: IncidentType,
     page?: string,
     perPage?: string,
     sortByCreatedAt?: string,
@@ -64,6 +65,11 @@ export class IncidentRepository {
               },
             },
           ],
+        }),
+        ...(incidentType && {
+          type: {
+            in: [incidentType],
+          },
         }),
       },
       orderBy: [

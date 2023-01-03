@@ -18,7 +18,7 @@ import { GetIncidentByIdRes } from './interface/getIncidentById.interface';
 import { DeleteIncidentByIdRes } from './interface/deleteIncidentById.interface';
 import { UpdateIncidentStatusRes } from './interface/updateIncidentStatus.interface';
 import { AssignIncidentRes } from './interface/assignIncident.interface';
-import { UserRole } from '@prisma/client';
+import { UserRole, IncidentType } from '@prisma/client';
 
 @Controller('incidents')
 export class IncidentController {
@@ -58,6 +58,7 @@ export class IncidentController {
     @Query('userRole') userRole: UserRole,
     @Query('userId') userId: string,
     @Query('searchText') searchText?: string,
+    @Query('incidentType') incidentType?: IncidentType,
     @Query('page') page?: string,
     @Query('perPage') perPage?: string,
     @Query('sortByCreatedAt') sortByCreatedAt?: string,
@@ -69,6 +70,7 @@ export class IncidentController {
       userRole,
       userId,
       searchText,
+      incidentType,
       page,
       perPage,
       sortByCreatedAt,
