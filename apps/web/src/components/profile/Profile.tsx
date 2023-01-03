@@ -79,7 +79,7 @@ function Profile() {
         const responseData = response.data;
         if (responseData) {
           setSnackbarOpen(true);
-          setSnackbarText('Update user by id');
+          setSnackbarText('Update user');
         }
       }
     }

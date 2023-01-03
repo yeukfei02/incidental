@@ -11,13 +11,15 @@ import { CreateIncidentDto } from './dto/createIncident.dto';
 import { GetIncidentsDto } from './dto/getIncidents.dto';
 import { UpdateIncidentStatusDto } from './dto/updateIncidentStatus.dto';
 import { AssignIncidentStatusDto } from './dto/assignIncidentStatus.dto';
+import { UpdateIncidentByIdDto } from './dto/updateIncidentById.dto';
 import { IncidentService } from './incident.service';
 import { CreateIncidentRes } from './interface/createIncident.interface';
 import { GetIncidentsRes } from './interface/getIncidents.interface';
 import { GetIncidentByIdRes } from './interface/getIncidentById.interface';
-import { DeleteIncidentByIdRes } from './interface/deleteIncidentById.interface';
-import { UpdateIncidentStatusRes } from './interface/updateIncidentStatus.interface';
 import { AssignIncidentRes } from './interface/assignIncident.interface';
+import { UpdateIncidentStatusRes } from './interface/updateIncidentStatus.interface';
+import { UpdateIncidentByIdRes } from './interface/updateIncidentById.interface';
+import { DeleteIncidentByIdRes } from './interface/deleteIncidentById.interface';
 
 @Controller('incidents')
 export class IncidentController {
@@ -152,6 +154,35 @@ export class IncidentController {
     if (incident) {
       response = {
         message: 'update incident status',
+        incident: incident,
+      };
+    }
+
+    return response;
+  }
+
+  @Patch('/:id')
+  async updateIncidentById(
+    @Param('id') id: string,
+    @Body() updateIncidentByIdDto: UpdateIncidentByIdDto
+  ): Promise<UpdateIncidentByIdRes> {
+    let response: UpdateIncidentByIdRes;
+
+    const title = updateIncidentByIdDto.title;
+    const description = updateIncidentByIdDto.description;
+    const incidentType = updateIncidentByIdDto.incidentType;
+    const status = updateIncidentByIdDto.status;
+
+    const incident = await this.incidentService.updateIncidentById(
+      id,
+      title,
+      description,
+      incidentType,
+      status
+    );
+    if (incident) {
+      response = {
+        message: 'update incident by id',
         incident: incident,
       };
     }

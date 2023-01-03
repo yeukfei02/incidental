@@ -115,6 +115,29 @@ export const updateIncidentStatus = async (
   return response;
 };
 
+export const updateIncidentById = async (
+  token: string,
+  id: string,
+  title: string,
+  description: string,
+  incidentType: IncidentType,
+  status: Status
+) => {
+  const data = {
+    title: title,
+    description: description,
+    incidentType: incidentType,
+    status: status,
+  };
+
+  const response = await axios.patch(`${rootUrl}/incidents/${id}`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response;
+};
+
 export const deleteIncidentById = async (token: string, id: string) => {
   const response = await axios.delete(`${rootUrl}/incidents/${id}`, {
     headers: {

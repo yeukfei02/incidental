@@ -76,6 +76,23 @@ export class IncidentService {
     return incident;
   }
 
+  async updateIncidentById(
+    id: string,
+    title: string,
+    description: string,
+    incidentType: IncidentType,
+    status: Status
+  ) {
+    const incident = await this.incidentRepository.updateIncidentById(
+      id,
+      title,
+      description,
+      incidentType,
+      status
+    );
+    return incident;
+  }
+
   async deleteIncidentById(id: string) {
     const incident = await this.incidentRepository.deleteIncidentById(id);
     return incident;

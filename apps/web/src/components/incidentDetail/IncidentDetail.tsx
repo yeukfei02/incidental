@@ -9,13 +9,16 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import * as incidentService from '../../services/incidentService';
 import { IncidentType, Status } from '@prisma/client';
 import { IncidentRes } from '../../interface/getIncidentById.interface';
 import CustomBreadcrumbs from '../customBreadcrumbs/CustomBreadcrumbs';
+import CustomSnackBar from '../customSnackBar/CustomSnackBar';
+import { Url } from '../../helper/url';
 
 function IncidentDetail() {
+  const navigate = useNavigate();
   const { id } = useParams();
 
   const [incident, setIncident] = useState<IncidentRes>();
@@ -25,6 +28,9 @@ function IncidentDetail() {
     IncidentType.MEDIUM
   );
   const [status, setStatus] = useState<Status>(Status.UNASSIGNED);
+
+  const [snackbarText, setSnackbarText] = useState('');
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -71,8 +77,28 @@ function IncidentDetail() {
     setStatus(event.target.value as Status);
   };
 
-  const handleUpdateIncidentClick = () => {
-    console.log('update incident api');
+  const handleUpdateIncidentClick = async () => {
+    const token = localStorage.getItem('token');
+    if (token && incident) {
+      const response = await incidentService.updateIncidentById(
+        token,
+        incident.id,
+        title,
+        description,
+        incidentType,
+        status
+      );
+      if (response) {
+        const responseData = response.data;
+        if (responseData) {
+          setSnackbarOpen(true);
+          setSnackbarText('Update incident');
+          setTimeout(() => {
+            navigate(Url.HOME);
+          }, 1500);
+        }
+      }
+    }
   };
 
   const renderIncidentDetailView = () => {
@@ -206,6 +232,12 @@ function IncidentDetail() {
       </div>
 
       {renderIncidentDetailView()}
+
+      <CustomSnackBar
+        type={snackbarText}
+        open={snackbarOpen}
+        setOpen={setSnackbarOpen}
+      />
     </>
   );
 }

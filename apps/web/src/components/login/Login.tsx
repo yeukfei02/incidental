@@ -56,7 +56,6 @@ function Login() {
             setOpen(true);
             setTimeout(() => {
               localStorage.setItem('token', responseData.token);
-              localStorage.setItem('user', JSON.stringify(responseData.user));
               localStorage.setItem('userId', responseData.user.id);
               localStorage.setItem('userRole', responseData.user.userRoles[0]);
 

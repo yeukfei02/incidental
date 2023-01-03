@@ -247,6 +247,49 @@ export class IncidentRepository {
     return incident;
   }
 
+  async updateIncidentById(
+    id: string,
+    title: string,
+    description: string,
+    incidentType: IncidentType,
+    status: Status
+  ) {
+    const incident = await this.prisma.incident.update({
+      where: {
+        id: id,
+      },
+      data: {
+        title: title,
+        description: description,
+        type: incidentType,
+        status: status,
+      },
+      include: {
+        creator: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            created_at: true,
+            updated_at: true,
+            userRoles: true,
+          },
+        },
+        assignee: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            created_at: true,
+            updated_at: true,
+            userRoles: true,
+          },
+        },
+      },
+    });
+    return incident;
+  }
+
   async deleteIncidentById(id: string) {
     const incident = await this.prisma.incident.delete({
       where: {
