@@ -270,7 +270,7 @@ function Dashboard() {
                   <Select
                     labelId="demo-simple-select-helper-label"
                     id="demo-simple-select-helper"
-                    value={incidentType}
+                    value={incidentType ? incidentType : ''}
                     label="Incident Type"
                     onChange={handleIncidentTypeChange}
                   >

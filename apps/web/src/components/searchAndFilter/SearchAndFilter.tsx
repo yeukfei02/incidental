@@ -68,11 +68,10 @@ function SearchAndFilter({
           <Select
             labelId="demo-simple-select-helper-label"
             id="demo-simple-select-helper"
-            value={incidentType}
+            value={incidentType ? incidentType : ''}
             label="Incident Type"
             onChange={handleIncidentTypeChange}
           >
-            <MenuItem value={undefined}>Please Select Incident Type</MenuItem>
             <MenuItem value={IncidentType.HIGH}>High</MenuItem>
             <MenuItem value={IncidentType.MEDIUM}>Medium</MenuItem>
             <MenuItem value={IncidentType.LOW}>Low</MenuItem>
