@@ -9,21 +9,28 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import * as incidentService from '../../services/incidentService';
-import { Incident, IncidentType, Status } from '@prisma/client';
+import { IncidentType, Status } from '@prisma/client';
+import { IncidentRes } from '../../interface/getIncidentById.interface';
 import CustomBreadcrumbs from '../customBreadcrumbs/CustomBreadcrumbs';
+import CustomSnackBar from '../customSnackBar/CustomSnackBar';
+import { Url } from '../../helper/url';
 
 function IncidentDetail() {
+  const navigate = useNavigate();
   const { id } = useParams();
 
-  const [incident, setIncident] = useState<Incident>();
+  const [incident, setIncident] = useState<IncidentRes>();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [incidentType, setIncidentType] = useState<IncidentType>(
     IncidentType.MEDIUM
   );
   const [status, setStatus] = useState<Status>(Status.UNASSIGNED);
+
+  const [snackbarText, setSnackbarText] = useState('');
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -70,8 +77,28 @@ function IncidentDetail() {
     setStatus(event.target.value as Status);
   };
 
-  const handleUpdateIncidentClick = () => {
-    console.log('update incident api');
+  const handleUpdateIncidentClick = async () => {
+    const token = localStorage.getItem('token');
+    if (token && incident) {
+      const response = await incidentService.updateIncidentById(
+        token,
+        incident.id,
+        title,
+        description,
+        incidentType,
+        status
+      );
+      if (response) {
+        const responseData = response.data;
+        if (responseData) {
+          setSnackbarOpen(true);
+          setSnackbarText('Update incident');
+          setTimeout(() => {
+            navigate(Url.HOME);
+          }, 1500);
+        }
+      }
+    }
   };
 
   const renderIncidentDetailView = () => {
@@ -157,9 +184,7 @@ function IncidentDetail() {
                 type="text"
                 autoComplete="creator"
                 value={
-                  (incident as any) && (incident as any).creator
-                    ? (incident as any).creator.name
-                    : ''
+                  incident && incident.creator ? incident.creator.name : ''
                 }
                 disabled
               />
@@ -173,9 +198,7 @@ function IncidentDetail() {
               type="text"
               autoComplete="assignee"
               value={
-                (incident as any) && (incident as any).assignee
-                  ? (incident as any).assignee.name
-                  : ''
+                incident && incident.assignee ? incident.assignee.name : ''
               }
               disabled
             />
@@ -204,11 +227,17 @@ function IncidentDetail() {
         <CustomBreadcrumbs
           page="Incidents"
           subPage="Incident Detail"
-          incidentId={incident ? (incident as any).id : ''}
+          incidentId={incident ? incident.id : ''}
         />
       </div>
 
       {renderIncidentDetailView()}
+
+      <CustomSnackBar
+        type={snackbarText}
+        open={snackbarOpen}
+        setOpen={setSnackbarOpen}
+      />
     </>
   );
 }

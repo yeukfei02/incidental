@@ -1,26 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from './user.repository';
-import { UserRole } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+import { SignupDto } from './dto/signup.dto';
+import { LoginDto } from './dto/login.dto';
+import { UpdateUserByIdDto } from './dto/updateUserById.dto';
+import { ChangePasswordDto } from './dto/changePassword.dto';
 
 @Injectable()
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async signup(
-    name: string,
-    email: string,
-    password: string,
-    userRoles: UserRole[]
-  ) {
+  async signup(signupDto: SignupDto) {
     let user = null;
 
-    const createdUser = await this.userRepository.createUser(
-      name,
-      email,
-      password,
-      userRoles
-    );
+    const createdUser = await this.userRepository.createUser(signupDto);
     if (createdUser) {
       user = {
         id: createdUser.id,
@@ -35,8 +28,11 @@ export class UserService {
     return user;
   }
 
-  async login(email: string, password: string) {
+  async login(loginDto: LoginDto) {
     let user = null;
+
+    const email = loginDto.email;
+    const password = loginDto.password;
 
     const userFromDB = await this.userRepository.findUserByEmail(email);
     if (userFromDB) {
@@ -97,19 +93,12 @@ export class UserService {
     return user;
   }
 
-  async updateUserById(
-    id: string,
-    name: string,
-    email: string,
-    userRole: UserRole
-  ) {
+  async updateUserById(id: string, updateUserByIdDto: UpdateUserByIdDto) {
     let user = null;
 
     const userFromDB = await this.userRepository.updateUserById(
       id,
-      name,
-      email,
-      userRole
+      updateUserByIdDto
     );
     if (userFromDB) {
       user = {
@@ -125,10 +114,13 @@ export class UserService {
     return user;
   }
 
-  async changePassword(id: string, password: string) {
+  async changePassword(id: string, changePasswordDto: ChangePasswordDto) {
     let user = null;
 
-    const userFromDB = await this.userRepository.changePassword(id, password);
+    const userFromDB = await this.userRepository.changePassword(
+      id,
+      changePasswordDto
+    );
     if (userFromDB) {
       user = {
         id: userFromDB.id,

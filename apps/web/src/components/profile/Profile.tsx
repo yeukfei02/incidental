@@ -5,10 +5,6 @@ import TextField from '@mui/material/TextField';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { User, UserRole } from '@prisma/client';
 import CustomBreadcrumbs from '../customBreadcrumbs/CustomBreadcrumbs';
 import CustomSnackBar from '../customSnackBar/CustomSnackBar';
@@ -19,7 +15,7 @@ function Profile() {
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [userRole, setUserRole] = useState<UserRole>(UserRole.NORMAL_USER);
+  const [userRoles, setUserRoles] = useState<UserRole[]>([]);
 
   const [snackbarText, setSnackbarText] = useState('');
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -41,7 +37,7 @@ function Profile() {
           setUser(responseData.user);
           setName(responseData.user.name);
           setEmail(responseData.user.email);
-          setUserRole(responseData.user.userRoles[0]);
+          setUserRoles(responseData.user.userRoles);
         }
       }
     }
@@ -59,19 +55,14 @@ function Profile() {
     setEmail(e.target.value);
   };
 
-  const handleUserRolesChange = (event: SelectChangeEvent) => {
-    setUserRole(event.target.value as UserRole);
-  };
-
   const handleUpdateUserClick = async () => {
     const token = localStorage.getItem('token');
-    if (token && user && name && email && userRole) {
+    if (token && user && name && email) {
       const response = await userService.updateUserById(
         token,
         user.id,
         name,
-        email,
-        userRole
+        email
       );
       console.log('response = ', response);
 
@@ -79,7 +70,7 @@ function Profile() {
         const responseData = response.data;
         if (responseData) {
           setSnackbarOpen(true);
-          setSnackbarText('Update user by id');
+          setSnackbarText('Update user');
         }
       }
     }
@@ -121,23 +112,17 @@ function Profile() {
               value={email}
               onChange={(e) => handleEmailChange(e)}
             />
-            <div className="my-5">
-              <FormControl className="w-full">
-                <InputLabel id="demo-simple-select-helper-label">
-                  User Roles
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-helper-label"
-                  id="demo-simple-select-helper"
-                  value={userRole}
-                  label="User Roles"
-                  onChange={handleUserRolesChange}
-                >
-                  <MenuItem value={UserRole.NORMAL_USER}>Normal User</MenuItem>
-                  <MenuItem value={UserRole.ADMIN}>Admin</MenuItem>
-                </Select>
-              </FormControl>
-            </div>
+            <TextField
+              margin="normal"
+              fullWidth
+              id="userRoles"
+              label="User Role"
+              name="userRoles"
+              type="text"
+              autoComplete="userRoles"
+              value={userRoles ? userRoles[0] : ''}
+              disabled
+            />
             <Button
               fullWidth
               color="primary"

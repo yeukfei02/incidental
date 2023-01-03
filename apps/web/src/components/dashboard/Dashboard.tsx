@@ -3,9 +3,6 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
-import Pagination from '@mui/material/Pagination';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
@@ -20,6 +17,7 @@ import CustomAppBar from '../customAppBar/CustomAppBar';
 import { IncidentType, UserRole } from '@prisma/client';
 import * as incidentService from '../../services/incidentService';
 import CustomBreadcrumbs from '../customBreadcrumbs/CustomBreadcrumbs';
+import SearchAndFilter from '../searchAndFilter/SearchAndFilter';
 
 function Dashboard() {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -28,9 +26,9 @@ function Dashboard() {
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [incidentType, setIncidentType] = useState<IncidentType>(
-    IncidentType.MEDIUM
-  );
+  const [createIncidentIncidentType, setCreateIncidentIncidentType] =
+    useState<IncidentType>();
+  const [incidentType, setIncidentType] = useState<IncidentType>();
 
   const [incidents, setIncidents] = useState([]);
   const [totalPageCount, setTotalPageCount] = useState(0);
@@ -45,31 +43,36 @@ function Dashboard() {
   const userId = localStorage.getItem('userId');
 
   useEffect(() => {
-    getIncidents(searchText, page, sortByCreatedAt, sortByUpdatedAt);
-  }, [searchText, page, sortByCreatedAt, sortByUpdatedAt]);
+    getIncidents(
+      searchText,
+      incidentType,
+      page,
+      sortByCreatedAt,
+      sortByUpdatedAt
+    );
+  }, [searchText, incidentType, page, sortByCreatedAt, sortByUpdatedAt]);
 
   const getIncidents = async (
     searchText?: string,
+    incidentType?: IncidentType,
     page?: number,
     sortByCreatedAt?: boolean,
     sortByUpdatedAt?: boolean
   ) => {
     if (token && userRole && userId) {
-      const pageStr = page ? page.toString() : '1';
-      const perPageStr = '10';
-
-      const sortByCreatedAtStr = sortByCreatedAt ? 'true' : 'false';
-      const sortByUpdatedAtStr = sortByUpdatedAt ? 'true' : 'false';
+      const pageInt = page ? page : 1;
+      const perPage = 10;
 
       const response = await incidentService.getIncidents(
         token,
         userRole as UserRole,
         userId,
         searchText,
-        pageStr,
-        perPageStr,
-        sortByCreatedAtStr,
-        sortByUpdatedAtStr
+        incidentType,
+        pageInt,
+        perPage,
+        sortByCreatedAt,
+        sortByUpdatedAt
       );
       console.log('response = ', response);
 
@@ -97,6 +100,10 @@ function Dashboard() {
     setDescription(e.target.value);
   };
 
+  const handleCreateIncidentIncidentTypeChange = (event: SelectChangeEvent) => {
+    setCreateIncidentIncidentType(event.target.value as IncidentType);
+  };
+
   const handleIncidentTypeChange = (event: SelectChangeEvent) => {
     setIncidentType(event.target.value as IncidentType);
   };
@@ -119,12 +126,20 @@ function Dashboard() {
     setSearchText(e.target.value);
   };
 
+  const handleClearFilterClick = () => {
+    setSearchText('');
+    setIncidentType(undefined);
+    setPage(1);
+    setSortByCreatedAt(false);
+    setSortByUpdatedAt(false);
+  };
+
   const handleCreateIncident = async () => {
     if (
       token &&
       title &&
       description &&
-      incidentType &&
+      createIncidentIncidentType &&
       userId &&
       userRole &&
       userRole === UserRole.ADMIN
@@ -133,7 +148,7 @@ function Dashboard() {
         token,
         title,
         description,
-        incidentType,
+        createIncidentIncidentType,
         userId,
         userRole as UserRole
       );
@@ -148,7 +163,7 @@ function Dashboard() {
 
           setTitle('');
           setDescription('');
-          setIncidentType(IncidentType.MEDIUM);
+          setIncidentType(undefined);
 
           await getIncidents(searchText);
         }
@@ -177,14 +192,7 @@ function Dashboard() {
       </div>
 
       <div className="px-10">
-        <div className="flex items-center justify-between">
-          <TextField
-            className="w-2/6"
-            id="outlined-basic"
-            label="Search"
-            variant="outlined"
-            onChange={(e) => handleSearchTextChange(e)}
-          />
+        <div className="flex justify-end">
           {userRole && userRole === UserRole.ADMIN ? (
             <Button
               className="self-stretch"
@@ -196,31 +204,20 @@ function Dashboard() {
           ) : null}
         </div>
 
-        <Pagination
-          className="my-5"
-          count={totalPageCount}
+        <SearchAndFilter
+          searchText={searchText}
+          incidentType={incidentType}
           page={page}
-          onChange={handlePageChange}
-          variant="outlined"
-          color="primary"
-          showFirstButton
-          showLastButton
+          sortByCreatedAt={sortByCreatedAt}
+          sortByUpdatedAt={sortByUpdatedAt}
+          totalPageCount={totalPageCount}
+          handlePageChange={handlePageChange}
+          handleSortByCreatedAt={handleSortByCreatedAt}
+          handleSortByUpdatedAt={handleSortByUpdatedAt}
+          handleIncidentTypeChange={handleIncidentTypeChange}
+          handleSearchTextChange={handleSearchTextChange}
+          handleClearFilterClick={handleClearFilterClick}
         />
-
-        <div className="flex flex-row items-center">
-          <FormControlLabel
-            control={<Switch onChange={(e) => handleSortByCreatedAt(e)} />}
-            label={`Sort by Created At (${
-              sortByCreatedAt ? 'Ascending' : 'Descending'
-            })`}
-          />
-          <FormControlLabel
-            control={<Switch onChange={(e) => handleSortByUpdatedAt(e)} />}
-            label={`Sort by Updated At (${
-              sortByUpdatedAt ? 'Ascending' : 'Descending'
-            })`}
-          />
-        </div>
 
         <IncidentCardList incidents={incidents} getIncidents={getIncidents} />
 
@@ -276,9 +273,13 @@ function Dashboard() {
                   <Select
                     labelId="demo-simple-select-helper-label"
                     id="demo-simple-select-helper"
-                    value={incidentType}
+                    value={
+                      createIncidentIncidentType
+                        ? createIncidentIncidentType
+                        : ''
+                    }
                     label="Incident Type"
-                    onChange={handleIncidentTypeChange}
+                    onChange={handleCreateIncidentIncidentTypeChange}
                   >
                     <MenuItem value={IncidentType.HIGH}>High</MenuItem>
                     <MenuItem value={IncidentType.MEDIUM}>Medium</MenuItem>

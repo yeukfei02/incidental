@@ -53,13 +53,11 @@ export const updateUserById = async (
   token: string,
   id: string,
   name: string,
-  email: string,
-  userRole: UserRole
+  email: string
 ) => {
   const data = {
     name: name,
     email: email,
-    userRole: userRole,
   };
   const response = await axios.patch(`${rootUrl}/users/${id}`, data, {
     headers: {

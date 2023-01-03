@@ -33,31 +33,32 @@ export const getIncidents = async (
   userRole: UserRole,
   userId: string,
   searchText?: string,
-  pageStr?: string,
-  perPageStr?: string,
-  sortByCreatedAtStr?: string,
-  sortByUpdatedAtStr?: string
+  incidentType?: IncidentType,
+  page?: number,
+  perPage?: number,
+  sortByCreatedAt?: boolean,
+  sortByUpdatedAt?: boolean
 ) => {
-  const params = {
+  const data = {
     userRole: userRole,
     userId: userId,
     ...(searchText && { searchText: searchText }),
-    ...(pageStr && {
-      page: pageStr,
+    ...(incidentType && { incidentType: incidentType }),
+    ...(page && {
+      page: page,
     }),
-    ...(perPageStr && {
-      perPage: perPageStr,
+    ...(perPage && {
+      perPage: perPage,
     }),
-    ...(sortByCreatedAtStr && {
-      sortByCreatedAt: sortByCreatedAtStr,
+    ...(sortByCreatedAt && {
+      sortByCreatedAt: sortByCreatedAt,
     }),
-    ...(sortByUpdatedAtStr && {
-      sortByUpdatedAt: sortByUpdatedAtStr,
+    ...(sortByUpdatedAt && {
+      sortByUpdatedAt: sortByUpdatedAt,
     }),
   };
 
-  const response = await axios.get(`${rootUrl}/incidents/list`, {
-    params: params,
+  const response = await axios.post(`${rootUrl}/incidents/list`, data, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -111,6 +112,29 @@ export const updateIncidentStatus = async (
       },
     }
   );
+  return response;
+};
+
+export const updateIncidentById = async (
+  token: string,
+  id: string,
+  title: string,
+  description: string,
+  incidentType: IncidentType,
+  status: Status
+) => {
+  const data = {
+    title: title,
+    description: description,
+    incidentType: incidentType,
+    status: status,
+  };
+
+  const response = await axios.patch(`${rootUrl}/incidents/${id}`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return response;
 };
 

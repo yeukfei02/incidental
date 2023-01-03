@@ -1,45 +1,26 @@
 import { Injectable } from '@nestjs/common';
-import { IncidentType, UserRole, Status } from '@prisma/client';
+import { UserRole } from '@prisma/client';
+import { AssignIncidentStatusDto } from './dto/assignIncidentStatus.dto';
+import { CreateIncidentDto } from './dto/createIncident.dto';
+import { GetIncidentsDto } from './dto/getIncidents.dto';
+import { UpdateIncidentByIdDto } from './dto/updateIncidentById.dto';
+import { UpdateIncidentStatusDto } from './dto/updateIncidentStatus.dto';
 import { IncidentRepository } from './incident.repository';
 
 @Injectable()
 export class IncidentService {
   constructor(private readonly incidentRepository: IncidentRepository) {}
 
-  async createIncident(
-    title: string,
-    description: string,
-    type: IncidentType,
-    creatorId: string,
-    userRole: UserRole
-  ) {
+  async createIncident(createIncidentDto: CreateIncidentDto) {
     const incident = await this.incidentRepository.createIncident(
-      title,
-      description,
-      type,
-      creatorId,
-      userRole
+      createIncidentDto
     );
     return incident;
   }
 
-  async getIncidents(
-    userRole: UserRole,
-    userId: string,
-    searchText?: string,
-    page?: string,
-    perPage?: string,
-    sortByCreatedAt?: string,
-    sortByUpdatedAt?: string
-  ) {
+  async getIncidents(getIncidentsDto: GetIncidentsDto) {
     const incidents = await this.incidentRepository.findIncidents(
-      userRole,
-      userId,
-      searchText,
-      page,
-      perPage,
-      sortByCreatedAt,
-      sortByUpdatedAt
+      getIncidentsDto
     );
     return incidents;
   }
@@ -58,18 +39,35 @@ export class IncidentService {
     return incident;
   }
 
-  async assignIncident(id: string, assigneeId: string) {
+  async assignIncident(
+    id: string,
+    assignIncidentStatusDto: AssignIncidentStatusDto
+  ) {
     const incident = await this.incidentRepository.assignIncident(
       id,
-      assigneeId
+      assignIncidentStatusDto
     );
     return incident;
   }
 
-  async updateIncidentStatus(id: string, status: Status) {
+  async updateIncidentStatus(
+    id: string,
+    updateIncidentStatusDto: UpdateIncidentStatusDto
+  ) {
     const incident = await this.incidentRepository.updateIncidentStatus(
       id,
-      status
+      updateIncidentStatusDto
+    );
+    return incident;
+  }
+
+  async updateIncidentById(
+    id: string,
+    updateIncidentByIdDto: UpdateIncidentByIdDto
+  ) {
+    const incident = await this.incidentRepository.updateIncidentById(
+      id,
+      updateIncidentByIdDto
     );
     return incident;
   }

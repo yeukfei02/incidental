@@ -5,20 +5,21 @@ import {
   Get,
   Patch,
   Delete,
-  Query,
   Param,
 } from '@nestjs/common';
 import { CreateIncidentDto } from './dto/createIncident.dto';
+import { GetIncidentsDto } from './dto/getIncidents.dto';
 import { UpdateIncidentStatusDto } from './dto/updateIncidentStatus.dto';
 import { AssignIncidentStatusDto } from './dto/assignIncidentStatus.dto';
+import { UpdateIncidentByIdDto } from './dto/updateIncidentById.dto';
 import { IncidentService } from './incident.service';
 import { CreateIncidentRes } from './interface/createIncident.interface';
 import { GetIncidentsRes } from './interface/getIncidents.interface';
 import { GetIncidentByIdRes } from './interface/getIncidentById.interface';
-import { DeleteIncidentByIdRes } from './interface/deleteIncidentById.interface';
-import { UpdateIncidentStatusRes } from './interface/updateIncidentStatus.interface';
 import { AssignIncidentRes } from './interface/assignIncident.interface';
-import { UserRole } from '@prisma/client';
+import { UpdateIncidentStatusRes } from './interface/updateIncidentStatus.interface';
+import { UpdateIncidentByIdRes } from './interface/updateIncidentById.interface';
+import { DeleteIncidentByIdRes } from './interface/deleteIncidentById.interface';
 
 @Controller('incidents')
 export class IncidentController {
@@ -30,18 +31,8 @@ export class IncidentController {
   ): Promise<CreateIncidentRes> {
     let response: CreateIncidentRes;
 
-    const title = createIncidentDto.title;
-    const description = createIncidentDto.description;
-    const type = createIncidentDto.type;
-    const creatorId = createIncidentDto.creatorId;
-    const userRole = createIncidentDto.userRole;
-
     const incident = await this.incidentService.createIncident(
-      title,
-      description,
-      type,
-      creatorId,
-      userRole
+      createIncidentDto
     );
     if (incident) {
       response = {
@@ -53,27 +44,18 @@ export class IncidentController {
     return response;
   }
 
-  @Get('/list')
+  @Post('/list')
   async getIncidents(
-    @Query('userRole') userRole: UserRole,
-    @Query('userId') userId: string,
-    @Query('searchText') searchText?: string,
-    @Query('page') page?: string,
-    @Query('perPage') perPage?: string,
-    @Query('sortByCreatedAt') sortByCreatedAt?: string,
-    @Query('sortByUpdatedAt') sortByUpdatedAt?: string
+    @Body() getIncidentsDto: GetIncidentsDto
   ): Promise<GetIncidentsRes> {
     let response: GetIncidentsRes;
 
-    const incidents = await this.incidentService.getIncidents(
-      userRole,
-      userId,
-      searchText,
-      page,
-      perPage,
-      sortByCreatedAt,
-      sortByUpdatedAt
-    );
+    const userRole = getIncidentsDto.userRole;
+    const userId = getIncidentsDto.userId;
+    const page = getIncidentsDto.page ? getIncidentsDto.page : 1;
+    const perPage = getIncidentsDto.perPage ? getIncidentsDto.perPage : 10;
+
+    const incidents = await this.incidentService.getIncidents(getIncidentsDto);
     const allIncidents =
       await this.incidentService.getAllIncidentsByUserRoleAndUserId(
         userRole,
@@ -81,19 +63,16 @@ export class IncidentController {
       );
     console.log('allIncidents.length = ', allIncidents.length);
 
-    const pageInt = page ? parseInt(page, 10) : 1;
-    const perPageInt = perPage ? parseInt(perPage, 10) : 10;
-
     if (incidents) {
       response = {
         message: 'get incidents',
         incidents: incidents,
         total: incidents.length,
-        page: pageInt,
-        perPage: perPageInt,
+        page: page,
+        perPage: perPage,
         totalPageCount:
           allIncidents && allIncidents.length > 0
-            ? Math.floor(allIncidents.length / perPageInt) || 1
+            ? Math.floor(allIncidents.length / perPage) || 1
             : 1,
       };
     }
@@ -123,9 +102,10 @@ export class IncidentController {
   ): Promise<AssignIncidentRes> {
     let response: AssignIncidentRes;
 
-    const assigneeId = assignIncidentStatusDto.assigneeId;
-
-    const incident = await this.incidentService.assignIncident(id, assigneeId);
+    const incident = await this.incidentService.assignIncident(
+      id,
+      assignIncidentStatusDto
+    );
     if (incident) {
       response = {
         message: 'update incident status',
@@ -143,15 +123,34 @@ export class IncidentController {
   ): Promise<UpdateIncidentStatusRes> {
     let response: UpdateIncidentStatusRes;
 
-    const status = updateIncidentStatusDto.status;
-
     const incident = await this.incidentService.updateIncidentStatus(
       id,
-      status
+      updateIncidentStatusDto
     );
     if (incident) {
       response = {
         message: 'update incident status',
+        incident: incident,
+      };
+    }
+
+    return response;
+  }
+
+  @Patch('/:id')
+  async updateIncidentById(
+    @Param('id') id: string,
+    @Body() updateIncidentByIdDto: UpdateIncidentByIdDto
+  ): Promise<UpdateIncidentByIdRes> {
+    let response: UpdateIncidentByIdRes;
+
+    const incident = await this.incidentService.updateIncidentById(
+      id,
+      updateIncidentByIdDto
+    );
+    if (incident) {
+      response = {
+        message: 'update incident by id',
         incident: incident,
       };
     }
