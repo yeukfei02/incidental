@@ -109,14 +109,8 @@ export class UserController {
 
     const name = updateUserByIdDto.name;
     const email = updateUserByIdDto.email;
-    const userRole = updateUserByIdDto.userRole;
 
-    const user = await this.userService.updateUserById(
-      id,
-      name,
-      email,
-      userRole
-    );
+    const user = await this.userService.updateUserById(id, name, email);
     if (user) {
       response = {
         message: 'update user by id',

@@ -57,12 +57,7 @@ export class UserRepository {
     return user;
   }
 
-  async updateUserById(
-    id: string,
-    name: string,
-    email: string,
-    userRole: UserRole
-  ) {
+  async updateUserById(id: string, name: string, email: string) {
     const user = await this.prisma.user.update({
       where: {
         id: id,
@@ -70,7 +65,7 @@ export class UserRepository {
       data: {
         name: name,
         email: email,
-        userRoles: [userRole],
+        updated_at: new Date(),
       },
     });
     return user;

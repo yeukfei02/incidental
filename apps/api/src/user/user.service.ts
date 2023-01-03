@@ -97,19 +97,13 @@ export class UserService {
     return user;
   }
 
-  async updateUserById(
-    id: string,
-    name: string,
-    email: string,
-    userRole: UserRole
-  ) {
+  async updateUserById(id: string, name: string, email: string) {
     let user = null;
 
     const userFromDB = await this.userRepository.updateUserById(
       id,
       name,
-      email,
-      userRole
+      email
     );
     if (userFromDB) {
       user = {
