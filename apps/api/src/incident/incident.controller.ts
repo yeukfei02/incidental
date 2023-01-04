@@ -72,7 +72,7 @@ export class IncidentController {
         perPage: perPage,
         totalPageCount:
           allIncidents && allIncidents.length > 0
-            ? Math.floor(allIncidents.length / perPage) || 1
+            ? Math.ceil(allIncidents.length / perPage) || 1
             : 1,
       };
     }
