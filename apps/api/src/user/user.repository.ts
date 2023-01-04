@@ -46,6 +46,9 @@ export class UserRepository {
           hasEvery: [UserRole.NORMAL_USER],
         },
       },
+      orderBy: {
+        name: 'asc',
+      },
     });
     return users;
   }
