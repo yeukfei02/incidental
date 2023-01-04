@@ -269,7 +269,6 @@ export class IncidentRepository {
     const title = updateIncidentByIdDto.title;
     const description = updateIncidentByIdDto.description;
     const incidentType = updateIncidentByIdDto.incidentType;
-    const status = updateIncidentByIdDto.status;
 
     const incident = await this.prisma.incident.update({
       where: {
@@ -279,7 +278,6 @@ export class IncidentRepository {
         title: title,
         description: description,
         type: incidentType,
-        status: status,
       },
       include: {
         creator: {

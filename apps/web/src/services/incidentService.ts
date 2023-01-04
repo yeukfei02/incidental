@@ -120,14 +120,12 @@ export const updateIncidentById = async (
   id: string,
   title: string,
   description: string,
-  incidentType: IncidentType,
-  status: Status
+  incidentType: IncidentType
 ) => {
   const data = {
     title: title,
     description: description,
     incidentType: incidentType,
-    status: status,
   };
 
   const response = await axios.patch(`${rootUrl}/incidents/${id}`, data, {

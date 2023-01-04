@@ -73,10 +73,6 @@ function IncidentDetail() {
     setIncidentType(event.target.value as IncidentType);
   };
 
-  const handleStatusChange = (event: SelectChangeEvent) => {
-    setStatus(event.target.value as Status);
-  };
-
   const handleUpdateIncidentClick = async () => {
     const token = localStorage.getItem('token');
     if (token && incident) {
@@ -85,8 +81,7 @@ function IncidentDetail() {
         incident.id,
         title,
         description,
-        incidentType,
-        status
+        incidentType
       );
       if (response) {
         const responseData = response.data;
@@ -155,24 +150,18 @@ function IncidentDetail() {
                 </Select>
               </FormControl>
             </div>
-            <div className="mt-5">
-              <FormControl className="w-full">
-                <InputLabel id="demo-simple-select-helper-label">
-                  Status
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-helper-label"
-                  id="demo-simple-select-helper"
-                  value={status}
-                  label="Status"
-                  onChange={handleStatusChange}
-                >
-                  <MenuItem value={Status.UNASSIGNED}>Unassigned</MenuItem>
-                  <MenuItem value={Status.ASSIGNED}>Assigned</MenuItem>
-                  <MenuItem value={Status.ACKNOWLEDGED}>Acknowledged</MenuItem>
-                  <MenuItem value={Status.RESOLVED}>Resolved</MenuItem>
-                </Select>
-              </FormControl>
+            <div className="mt-1">
+              <TextField
+                margin="normal"
+                fullWidth
+                id="status"
+                label="Status"
+                name="status"
+                type="text"
+                autoComplete="status"
+                value={status}
+                disabled
+              />
             </div>
             <div className="mt-1">
               <TextField
@@ -189,19 +178,21 @@ function IncidentDetail() {
                 disabled
               />
             </div>
-            <TextField
-              margin="normal"
-              fullWidth
-              id="assignee"
-              label="Assignee"
-              name="assignee"
-              type="text"
-              autoComplete="assignee"
-              value={
-                incident && incident.assignee ? incident.assignee.name : ''
-              }
-              disabled
-            />
+            <div className="mt-1">
+              <TextField
+                margin="normal"
+                fullWidth
+                id="assignee"
+                label="Assignee"
+                name="assignee"
+                type="text"
+                autoComplete="assignee"
+                value={
+                  incident && incident.assignee ? incident.assignee.name : ''
+                }
+                disabled
+              />
+            </div>
             <Button
               fullWidth
               color="primary"
