@@ -234,6 +234,7 @@ function IncidentDetail() {
           page="Incidents"
           subPage="Incident Detail"
           incidentId={incident ? incident.id : ''}
+          incidentRef={incidentRef}
         />
       </div>
 
