@@ -19,6 +19,8 @@ import CustomSnackBar from '../customSnackBar/CustomSnackBar';
 import * as userService from '../../services/userService';
 import { Url } from '../../helper/url';
 
+import BackgroundImage from '../../images/background-image.jpg';
+
 interface CopyrightProps {
   sx: {
     mt: number;
@@ -91,7 +93,7 @@ function Signup() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(https://source.unsplash.com/random)',
+            backgroundImage: `url(${BackgroundImage})`,
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light'
