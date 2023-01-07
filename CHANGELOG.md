@@ -2,6 +2,43 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.2](https://github.com/yeukfei02/incidental/compare/v0.1.1...v0.1.2) (2023-01-07)
+
+
+### Features
+
+* 🎸 add Accordion for search and filter ([66ef871](https://github.com/yeukfei02/incidental/commit/66ef87128ca8a134c6c2f6e19a7bcbdc4ae04a20))
+* 🎸 add favicon.ico ([12f0f0e](https://github.com/yeukfei02/incidental/commit/12f0f0e9926b522adcdd90323f6f4ba53729276f))
+* 🎸 add incidentRef and add status filter ([1537a0a](https://github.com/yeukfei02/incidental/commit/1537a0a89363a6eab8ae11ca31b25bcb91b8b4ef))
+* 🎸 add search and filter ui and api logic ([2a32a83](https://github.com/yeukfei02/incidental/commit/2a32a830b97aa7764198d5586a452d91f096c01a))
+* 🎸 add SearchAndFilter component ([c96e55e](https://github.com/yeukfei02/incidental/commit/c96e55e7ae9243db413132bf8b5f7f8c7fbcc790))
+* 🎸 add updateIncidentById api and ui ([4986866](https://github.com/yeukfei02/incidental/commit/4986866c2f22bbef659c86b0d438f78ca68c9a7a))
+* 🎸 add userRoles in Profile ([95f0f1e](https://github.com/yeukfei02/incidental/commit/95f0f1e888a2b9d8972725c9e31422e513f92229))
+
+
+### Bug Fixes
+
+* 🐛 add back components folder ([4af6ce5](https://github.com/yeukfei02/incidental/commit/4af6ce504a5dd4f497d446a6e7a70ee344a9df00))
+* 🐛 add background image, font family, update prisma lib ([baa0ca0](https://github.com/yeukfei02/incidental/commit/baa0ca0cf7592b8f14d4257561307ecaf3870194))
+* 🐛 add incidentRef in incident details and CustomBreadcrumb ([eaddb90](https://github.com/yeukfei02/incidental/commit/eaddb9067fba9436bf06595e3ce0f23092444880))
+* 🐛 add orderby name in getNormalUsers api ([a92ddb2](https://github.com/yeukfei02/incidental/commit/a92ddb2a047335309556b874a71d5e2c2cf545ca))
+* 🐛 fix api ([859bd93](https://github.com/yeukfei02/incidental/commit/859bd933e4d6b682fad4197e55d86fd2ebdc8818))
+* 🐛 fix App.tsx ([64e318b](https://github.com/yeukfei02/incidental/commit/64e318bb7f7243de1433ee99a8eda1618c02165a))
+* 🐛 fix changePassword api ([bd8c6eb](https://github.com/yeukfei02/incidental/commit/bd8c6ebf595de6747d4c7c0db21d4acfae906638))
+* 🐛 fix create incident ([ac73e2c](https://github.com/yeukfei02/incidental/commit/ac73e2c3ab71e1aff4fc65f70842c35b5aef87dd))
+* 🐛 fix duplicate call ([5e75fa5](https://github.com/yeukfei02/incidental/commit/5e75fa5710a04484784de1348e6832c0e25aaf9c))
+* 🐛 fix getIncidents api to post request ([b84b040](https://github.com/yeukfei02/incidental/commit/b84b0402df2ee66780abc616e8b05f4fd70fae6a))
+* 🐛 fix lint ([2d3f28f](https://github.com/yeukfei02/incidental/commit/2d3f28f7bc5e240b9c6e3421b7d6a6c966380be4))
+* 🐛 fix lint ([6da1c71](https://github.com/yeukfei02/incidental/commit/6da1c71109d5d39a6939cd7b8cc5f6759c2ba043))
+* 🐛 fix orderby ([a32ba55](https://github.com/yeukfei02/incidental/commit/a32ba55050d5bbf894de0fcef66c62cf46e63336))
+* 🐛 fix totalPageCount ([589a006](https://github.com/yeukfei02/incidental/commit/589a0066766c1326053337f2b79d399b21eecead))
+* 🐛 fix ui ([4ac07ce](https://github.com/yeukfei02/incidental/commit/4ac07ced7d5a44fc2c94597eaed524a85f87fdc2))
+* 🐛 fix ui data type and add card in search and filter ([1c8f229](https://github.com/yeukfei02/incidental/commit/1c8f2292b48147a0d58925a7ab22ec02d0a30a7d))
+* 🐛 fix updateUserById api ([d143a19](https://github.com/yeukfei02/incidental/commit/d143a19b058f15e235f2eee07bb4c882715c92cb))
+* 🐛 remove forget password ui ([ab66531](https://github.com/yeukfei02/incidental/commit/ab66531e9ecc1c81f390a8bd8553a4f1e525bd9a))
+* 🐛 remove status in updateIncidentById api ([80c540a](https://github.com/yeukfei02/incidental/commit/80c540a8d29605cde106c6eaa36ef88976ee0851))
+* 🐛 temp remove components folder ([bad39cc](https://github.com/yeukfei02/incidental/commit/bad39cc8e10de18582d5fa5fa54d9a4d821333c0))
+
 ### 0.1.1 (2023-01-02)
 
 
