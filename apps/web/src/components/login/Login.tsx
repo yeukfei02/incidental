@@ -14,6 +14,8 @@ import CustomSnackBar from '../customSnackBar/CustomSnackBar';
 import * as userService from '../../services/userService';
 import { Url } from '../../helper/url';
 
+import BackgroundImage from '../../images/background-image.jpg';
+
 interface CopyrightProps {
   sx: {
     mt: number;
@@ -78,7 +80,7 @@ function Login() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(https://source.unsplash.com/random)',
+            backgroundImage: `url(${BackgroundImage})`,
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light'
@@ -139,15 +141,6 @@ function Login() {
                 Login
               </Button>
               <Grid container>
-                <Grid item xs>
-                  <Link
-                    component="button"
-                    onClick={() => navigate(Url.HOME)}
-                    variant="body2"
-                  >
-                    Forgot password?
-                  </Link>
-                </Grid>
                 <Grid item>
                   <Link
                     component="button"

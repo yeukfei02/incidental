@@ -24,6 +24,7 @@ const theme = createTheme({
     button: {
       textTransform: 'none',
     },
+    fontFamily: ['Karla', 'sans-serif'].join(','),
   },
 });
 
