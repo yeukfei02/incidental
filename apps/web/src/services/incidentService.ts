@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { UserRole, IncidentType, Status } from '@prisma/client';
 import { getRootUrl } from '../helper/helper';
+import _ from 'lodash';
 
 const rootUrl = getRootUrl();
 
@@ -33,8 +34,8 @@ export const getIncidents = async (
   userRole: UserRole,
   userId: string,
   searchText?: string,
-  incidentType?: IncidentType,
-  status?: Status,
+  incidentType?: string[],
+  status?: string[],
   page?: number,
   perPage?: number,
   sortByCreatedAt?: boolean,
@@ -44,8 +45,8 @@ export const getIncidents = async (
     userRole: userRole,
     userId: userId,
     ...(searchText && { searchText: searchText }),
-    ...(incidentType && { incidentType: incidentType }),
-    ...(status && { status: status }),
+    ...(!_.isEmpty(incidentType) && { incidentType: incidentType }),
+    ...(!_.isEmpty(status) && { status: status }),
     ...(page && {
       page: page,
     }),

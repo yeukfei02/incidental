@@ -45,6 +45,7 @@ model Incident {
   @@index([creator_id], map: "index_incident_on_creator_id")
   @@index([assignee_id], map: "index_incident_on_assignee_id")
   @@index([status], map: "index_incident_on_status")
+  @@index([incidentRef], map: "index_incident_on_incidentRef")
   @@index([created_at], map: "index_incident_on_created_at")
   @@index([updated_at], map: "index_incident_on_updated_at")
 }

@@ -1,11 +1,11 @@
-import { UserRole, IncidentType, Status } from '@prisma/client';
+import { UserRole } from '@prisma/client';
 
 export class GetIncidentsDto {
   userRole: UserRole;
   userId: string;
   searchText?: string;
-  incidentType?: IncidentType;
-  status?: Status;
+  incidentType?: string[];
+  status?: string[];
   page?: number;
   perPage?: number;
   sortByCreatedAt?: boolean;

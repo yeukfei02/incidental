@@ -8,13 +8,16 @@ import FormControl from '@mui/material/FormControl';
 import Grid from '@mui/material/Grid';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import Box from '@mui/material/Box';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import Chip from '@mui/material/Chip';
 import InputLabel from '@mui/material/InputLabel';
 import { IncidentType, Status } from '@prisma/client';
 
 interface Props {
   searchText: string;
-  incidentType: IncidentType | undefined;
-  status: Status | undefined;
+  incidentType: string[];
+  status: string[];
   page: number;
   sortByCreatedAt: boolean;
   sortByUpdatedAt: boolean;
@@ -29,6 +32,17 @@ interface Props {
   ) => void;
   handleClearFilterClick: () => void;
 }
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
 
 function SearchAndFilter({
   searchText,
@@ -46,6 +60,19 @@ function SearchAndFilter({
   handleSearchTextChange,
   handleClearFilterClick,
 }: Props) {
+  const incidentTypesData = [
+    IncidentType.HIGH,
+    IncidentType.MEDIUM,
+    IncidentType.LOW,
+  ];
+
+  const statusesData = [
+    Status.UNASSIGNED,
+    Status.ASSIGNED,
+    Status.ACKNOWLEDGED,
+    Status.RESOLVED,
+  ];
+
   return (
     <div className="p-3">
       <div className="mb-5">
@@ -71,15 +98,24 @@ function SearchAndFilter({
               Incident Type
             </InputLabel>
             <Select
-              labelId="demo-simple-select-helper-label"
-              id="demo-simple-select-helper"
-              value={incidentType ? incidentType : ''}
-              label="Incident Type"
+              value={incidentType}
+              multiple
               onChange={handleIncidentTypeChange}
+              input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+              renderValue={(selected) => (
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                  {(selected as unknown as string[]).map((value, i) => (
+                    <Chip key={i} label={value} />
+                  ))}
+                </Box>
+              )}
+              MenuProps={MenuProps}
             >
-              <MenuItem value={IncidentType.HIGH}>High</MenuItem>
-              <MenuItem value={IncidentType.MEDIUM}>Medium</MenuItem>
-              <MenuItem value={IncidentType.LOW}>Low</MenuItem>
+              {incidentTypesData.map((incidentType, i) => (
+                <MenuItem key={i} value={incidentType}>
+                  {incidentType}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Grid>
@@ -87,16 +123,24 @@ function SearchAndFilter({
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-helper-label">Status</InputLabel>
             <Select
-              labelId="demo-simple-select-helper-label"
-              id="demo-simple-select-helper"
-              value={status ? status : ''}
-              label="Incident Type"
+              value={status}
+              multiple
               onChange={handleStatusChange}
+              input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+              renderValue={(selected) => (
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                  {(selected as unknown as string[]).map((value, i) => (
+                    <Chip key={i} label={value} />
+                  ))}
+                </Box>
+              )}
+              MenuProps={MenuProps}
             >
-              <MenuItem value={Status.UNASSIGNED}>Unassigned</MenuItem>
-              <MenuItem value={Status.ASSIGNED}>Assigned</MenuItem>
-              <MenuItem value={Status.ACKNOWLEDGED}>Acknowledged</MenuItem>
-              <MenuItem value={Status.RESOLVED}>Resolved</MenuItem>
+              {statusesData.map((status, i) => (
+                <MenuItem key={i} value={status}>
+                  {status}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Grid>
