@@ -3,6 +3,46 @@
   <h2 align="center">incidental</h2>
 </p>
 
+<p align="center">
+  <img src="https://github.com/yeukfei02/incidental/blob/main/screenshots/screenshot1.png">
+</p>
+
+<p align="center">
+  <img src="https://github.com/yeukfei02/incidental/blob/main/screenshots/screenshot2.png">
+</p>
+
+<p align="center">
+  <img src="https://github.com/yeukfei02/incidental/blob/main/screenshots/screenshot3.png">
+</p>
+
+<p align="center">
+  <img src="https://github.com/yeukfei02/incidental/blob/main/screenshots/screenshot4.png">
+</p>
+
+<p align="center">
+  <img src="https://github.com/yeukfei02/incidental/blob/main/screenshots/screenshot5.png">
+</p>
+
+<p align="center">
+  <img src="https://github.com/yeukfei02/incidental/blob/main/screenshots/screenshot6.png">
+</p>
+
+<p align="center">
+  <img src="https://github.com/yeukfei02/incidental/blob/main/screenshots/screenshot7.png">
+</p>
+
+<p align="center">
+  <img src="https://github.com/yeukfei02/incidental/blob/main/screenshots/screenshot8.png">
+</p>
+
+<p align="center">
+  <img src="https://github.com/yeukfei02/incidental/blob/main/screenshots/screenshot9.png">
+</p>
+
+<p align="center">
+  <img src="https://github.com/yeukfei02/incidental/blob/main/screenshots/screenshot10.png">
+</p>
+
 incident management system
 
 documentation: <https://documenter.getpostman.com/view/3827865/2s8Z6zzX4z>
