@@ -74,7 +74,9 @@ function CustomBreadcrumbs({ page, subPage, incidentId, incidentRef }: Props) {
           >
             {page}
           </div>
-          <Typography color="text.primary">{subPage} (#{incidentRef})</Typography>
+          <Typography color="text.primary">
+            {subPage} (#{incidentRef})
+          </Typography>
         </Breadcrumbs>
       );
     }
