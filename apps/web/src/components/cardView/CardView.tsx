@@ -262,6 +262,11 @@ function CardView({ incident, normalUsers, getIncidents }: Props) {
           </div>
         ) : null}
         <CardContent>
+          <div className="my-3">
+            <Typography variant="subtitle1" component="div" color="gray">
+              #{incident.incidentRef}
+            </Typography>
+          </div>
           <Typography variant="h5" component="div">
             {incident.title}
           </Typography>

@@ -7,14 +7,16 @@ import Switch from '@mui/material/Switch';
 import { Typography } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
+import Grid from '@mui/material/Grid';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
-import { IncidentType } from '@prisma/client';
+import { IncidentType, Status } from '@prisma/client';
 
 interface Props {
   searchText: string;
   incidentType: IncidentType | undefined;
+  status: Status | undefined;
   page: number;
   sortByCreatedAt: boolean;
   sortByUpdatedAt: boolean;
@@ -23,6 +25,7 @@ interface Props {
   handleSortByCreatedAt: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleSortByUpdatedAt: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleIncidentTypeChange: (event: SelectChangeEvent) => void;
+  handleStatusChange: (event: SelectChangeEvent) => void;
   handleSearchTextChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
@@ -32,6 +35,7 @@ interface Props {
 function SearchAndFilter({
   searchText,
   incidentType,
+  status,
   page,
   sortByCreatedAt,
   sortByUpdatedAt,
@@ -40,6 +44,7 @@ function SearchAndFilter({
   handleSortByCreatedAt,
   handleSortByUpdatedAt,
   handleIncidentTypeChange,
+  handleStatusChange,
   handleSearchTextChange,
   handleClearFilterClick,
 }: Props) {
@@ -50,34 +55,58 @@ function SearchAndFilter({
       </Typography>
 
       <div className="my-5">
-        <TextField
-          className="w-2/6"
-          id="outlined-basic"
-          label="Search"
-          variant="outlined"
-          value={searchText}
-          onChange={(e) => handleSearchTextChange(e)}
-        />
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              id="outlined-basic"
+              label="Search"
+              variant="outlined"
+              value={searchText}
+              onChange={(e) => handleSearchTextChange(e)}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}></Grid>
+        </Grid>
       </div>
 
-      <div className="my-5">
-        <FormControl className="w-2/6">
-          <InputLabel id="demo-simple-select-helper-label">
-            Incident Type
-          </InputLabel>
-          <Select
-            labelId="demo-simple-select-helper-label"
-            id="demo-simple-select-helper"
-            value={incidentType ? incidentType : ''}
-            label="Incident Type"
-            onChange={handleIncidentTypeChange}
-          >
-            <MenuItem value={IncidentType.HIGH}>High</MenuItem>
-            <MenuItem value={IncidentType.MEDIUM}>Medium</MenuItem>
-            <MenuItem value={IncidentType.LOW}>Low</MenuItem>
-          </Select>
-        </FormControl>
-      </div>
+      <Grid container spacing={2}>
+        <Grid item xs={12} sm={6}>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-helper-label">
+              Incident Type
+            </InputLabel>
+            <Select
+              labelId="demo-simple-select-helper-label"
+              id="demo-simple-select-helper"
+              value={incidentType ? incidentType : ''}
+              label="Incident Type"
+              onChange={handleIncidentTypeChange}
+            >
+              <MenuItem value={IncidentType.HIGH}>High</MenuItem>
+              <MenuItem value={IncidentType.MEDIUM}>Medium</MenuItem>
+              <MenuItem value={IncidentType.LOW}>Low</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-helper-label">Status</InputLabel>
+            <Select
+              labelId="demo-simple-select-helper-label"
+              id="demo-simple-select-helper"
+              value={status ? status : ''}
+              label="Incident Type"
+              onChange={handleStatusChange}
+            >
+              <MenuItem value={Status.UNASSIGNED}>Unassigned</MenuItem>
+              <MenuItem value={Status.ASSIGNED}>Assigned</MenuItem>
+              <MenuItem value={Status.ACKNOWLEDGED}>Acknowledged</MenuItem>
+              <MenuItem value={Status.RESOLVED}>Resolved</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+      </Grid>
 
       <Pagination
         className="my-5"

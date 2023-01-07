@@ -14,7 +14,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import CustomSnackBar from '../customSnackBar/CustomSnackBar';
 import IncidentCardList from '../incidentCardList/IncidentCardList';
 import CustomAppBar from '../customAppBar/CustomAppBar';
-import { IncidentType, UserRole } from '@prisma/client';
+import { IncidentType, Status, UserRole } from '@prisma/client';
 import * as incidentService from '../../services/incidentService';
 import CustomBreadcrumbs from '../customBreadcrumbs/CustomBreadcrumbs';
 import SearchAndFilter from '../searchAndFilter/SearchAndFilter';
@@ -29,6 +29,7 @@ function Dashboard() {
   const [createIncidentIncidentType, setCreateIncidentIncidentType] =
     useState<IncidentType>();
   const [incidentType, setIncidentType] = useState<IncidentType>();
+  const [status, setStatus] = useState<Status>();
 
   const [incidents, setIncidents] = useState([]);
   const [totalPageCount, setTotalPageCount] = useState(0);
@@ -46,15 +47,24 @@ function Dashboard() {
     getIncidents(
       searchText,
       incidentType,
+      status,
       page,
       sortByCreatedAt,
       sortByUpdatedAt
     );
-  }, [searchText, incidentType, page, sortByCreatedAt, sortByUpdatedAt]);
+  }, [
+    searchText,
+    incidentType,
+    status,
+    page,
+    sortByCreatedAt,
+    sortByUpdatedAt,
+  ]);
 
   const getIncidents = async (
     searchText?: string,
     incidentType?: IncidentType,
+    status?: Status,
     page?: number,
     sortByCreatedAt?: boolean,
     sortByUpdatedAt?: boolean
@@ -69,6 +79,7 @@ function Dashboard() {
         userId,
         searchText,
         incidentType,
+        status,
         pageInt,
         perPage,
         sortByCreatedAt,
@@ -108,6 +119,10 @@ function Dashboard() {
     setIncidentType(event.target.value as IncidentType);
   };
 
+  const handleStatusChange = (event: SelectChangeEvent) => {
+    setStatus(event.target.value as Status);
+  };
+
   const handleCreateIncidentButtonClick = () => {
     setDialogOpen(true);
   };
@@ -129,6 +144,7 @@ function Dashboard() {
   const handleClearFilterClick = () => {
     setSearchText('');
     setIncidentType(undefined);
+    setStatus(undefined);
     setPage(1);
     setSortByCreatedAt(false);
     setSortByUpdatedAt(false);
@@ -207,6 +223,7 @@ function Dashboard() {
         <SearchAndFilter
           searchText={searchText}
           incidentType={incidentType}
+          status={status}
           page={page}
           sortByCreatedAt={sortByCreatedAt}
           sortByUpdatedAt={sortByUpdatedAt}
@@ -215,6 +232,7 @@ function Dashboard() {
           handleSortByCreatedAt={handleSortByCreatedAt}
           handleSortByUpdatedAt={handleSortByUpdatedAt}
           handleIncidentTypeChange={handleIncidentTypeChange}
+          handleStatusChange={handleStatusChange}
           handleSearchTextChange={handleSearchTextChange}
           handleClearFilterClick={handleClearFilterClick}
         />
