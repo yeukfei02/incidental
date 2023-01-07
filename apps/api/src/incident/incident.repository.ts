@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Incident, UserRole, Status } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
+import { v4 as uuidv4 } from 'uuid';
 import { AssignIncidentStatusDto } from './dto/assignIncidentStatus.dto';
 import { CreateIncidentDto } from './dto/createIncident.dto';
 import { GetIncidentsDto } from './dto/getIncidents.dto';
@@ -26,6 +27,7 @@ export class IncidentRepository {
           title: title,
           description: description,
           type: type,
+          incidentRef: `I${uuidv4().substring(0, 8).toUpperCase()}`,
           creator_id: creatorId,
         },
       });
@@ -39,6 +41,7 @@ export class IncidentRepository {
     const userId = getIncidentsDto.userId;
     const searchText = getIncidentsDto.searchText;
     const incidentType = getIncidentsDto.incidentType;
+    const status = getIncidentsDto.status;
     const page = getIncidentsDto.page ? getIncidentsDto.page : 1;
     const perPage = getIncidentsDto.perPage ? getIncidentsDto.perPage : 10;
     const sortByCreatedAt = getIncidentsDto.sortByCreatedAt ? 'true' : 'false';
@@ -95,11 +98,22 @@ export class IncidentRepository {
                 mode: 'insensitive',
               },
             },
+            {
+              incidentRef: {
+                contains: searchText,
+                mode: 'insensitive',
+              },
+            },
           ],
         }),
         ...(incidentType && {
           type: {
             in: [incidentType],
+          },
+        }),
+        ...(status && {
+          status: {
+            in: [status],
           },
         }),
       },

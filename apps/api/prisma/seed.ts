@@ -67,6 +67,7 @@ async function createIncidents() {
         creator_id: adminUser.id,
         assignee_id: normalUser.id,
         status: Status.ASSIGNED,
+        incidentRef: `I${uuidv4().substring(0, 8).toUpperCase()}`,
         created_at: new Date(),
         updated_at: new Date(),
       };

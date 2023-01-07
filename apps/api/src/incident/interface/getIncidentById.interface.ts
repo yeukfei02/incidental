@@ -11,6 +11,7 @@ export interface Incident {
   creator_id: string;
   assignee_id: string;
   status: string;
+  incidentRef: string;
   created_at: Date;
   updated_at: Date;
   creator: Creator;

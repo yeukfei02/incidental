@@ -28,6 +28,7 @@ function IncidentDetail() {
     IncidentType.MEDIUM
   );
   const [status, setStatus] = useState<Status>(Status.UNASSIGNED);
+  const [incidentRef, setIncidentRef] = useState('');
 
   const [snackbarText, setSnackbarText] = useState('');
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -52,6 +53,7 @@ function IncidentDetail() {
           setDescription(responseData.incident.description);
           setIncidentType(responseData.incident.type);
           setStatus(responseData.incident.status);
+          setIncidentRef(responseData.incident.incidentRef);
         }
       }
     }
@@ -105,8 +107,21 @@ function IncidentDetail() {
           <Card className="p-5">
             <div className="my-3">
               <Typography variant="h5" component="div">
-                Incident Details
+                Incident Details (#{incidentRef})
               </Typography>
+            </div>
+            <div className="mt-1">
+              <TextField
+                margin="normal"
+                fullWidth
+                id="incidentRef"
+                label="Incident Ref"
+                name="incidentRef"
+                type="text"
+                autoComplete="incidentRef"
+                value={incidentRef}
+                disabled
+              />
             </div>
             <TextField
               margin="normal"
@@ -219,6 +234,7 @@ function IncidentDetail() {
           page="Incidents"
           subPage="Incident Detail"
           incidentId={incident ? incident.id : ''}
+          incidentRef={incidentRef}
         />
       </div>
 

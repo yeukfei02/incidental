@@ -1,20 +1,20 @@
 import React from 'react';
-import Card from '@mui/material/Card';
 import Pagination from '@mui/material/Pagination';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Button from '@mui/material/Button';
 import Switch from '@mui/material/Switch';
-import { Typography } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
+import Grid from '@mui/material/Grid';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
-import { IncidentType } from '@prisma/client';
+import { IncidentType, Status } from '@prisma/client';
 
 interface Props {
   searchText: string;
   incidentType: IncidentType | undefined;
+  status: Status | undefined;
   page: number;
   sortByCreatedAt: boolean;
   sortByUpdatedAt: boolean;
@@ -23,6 +23,7 @@ interface Props {
   handleSortByCreatedAt: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleSortByUpdatedAt: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleIncidentTypeChange: (event: SelectChangeEvent) => void;
+  handleStatusChange: (event: SelectChangeEvent) => void;
   handleSearchTextChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
@@ -32,6 +33,7 @@ interface Props {
 function SearchAndFilter({
   searchText,
   incidentType,
+  status,
   page,
   sortByCreatedAt,
   sortByUpdatedAt,
@@ -40,44 +42,65 @@ function SearchAndFilter({
   handleSortByCreatedAt,
   handleSortByUpdatedAt,
   handleIncidentTypeChange,
+  handleStatusChange,
   handleSearchTextChange,
   handleClearFilterClick,
 }: Props) {
   return (
-    <Card className="mt-5 p-7">
-      <Typography variant="h5">
-        <span className="font-bold">Search and Filter</span>
-      </Typography>
-
-      <div className="my-5">
-        <TextField
-          className="w-2/6"
-          id="outlined-basic"
-          label="Search"
-          variant="outlined"
-          value={searchText}
-          onChange={(e) => handleSearchTextChange(e)}
-        />
+    <div className="p-3">
+      <div className="mb-5">
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              id="outlined-basic"
+              label="Search"
+              variant="outlined"
+              value={searchText}
+              onChange={(e) => handleSearchTextChange(e)}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}></Grid>
+        </Grid>
       </div>
 
-      <div className="my-5">
-        <FormControl className="w-2/6">
-          <InputLabel id="demo-simple-select-helper-label">
-            Incident Type
-          </InputLabel>
-          <Select
-            labelId="demo-simple-select-helper-label"
-            id="demo-simple-select-helper"
-            value={incidentType ? incidentType : ''}
-            label="Incident Type"
-            onChange={handleIncidentTypeChange}
-          >
-            <MenuItem value={IncidentType.HIGH}>High</MenuItem>
-            <MenuItem value={IncidentType.MEDIUM}>Medium</MenuItem>
-            <MenuItem value={IncidentType.LOW}>Low</MenuItem>
-          </Select>
-        </FormControl>
-      </div>
+      <Grid container spacing={2}>
+        <Grid item xs={12} sm={6}>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-helper-label">
+              Incident Type
+            </InputLabel>
+            <Select
+              labelId="demo-simple-select-helper-label"
+              id="demo-simple-select-helper"
+              value={incidentType ? incidentType : ''}
+              label="Incident Type"
+              onChange={handleIncidentTypeChange}
+            >
+              <MenuItem value={IncidentType.HIGH}>High</MenuItem>
+              <MenuItem value={IncidentType.MEDIUM}>Medium</MenuItem>
+              <MenuItem value={IncidentType.LOW}>Low</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-helper-label">Status</InputLabel>
+            <Select
+              labelId="demo-simple-select-helper-label"
+              id="demo-simple-select-helper"
+              value={status ? status : ''}
+              label="Incident Type"
+              onChange={handleStatusChange}
+            >
+              <MenuItem value={Status.UNASSIGNED}>Unassigned</MenuItem>
+              <MenuItem value={Status.ASSIGNED}>Assigned</MenuItem>
+              <MenuItem value={Status.ACKNOWLEDGED}>Acknowledged</MenuItem>
+              <MenuItem value={Status.RESOLVED}>Resolved</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+      </Grid>
 
       <Pagination
         className="my-5"
@@ -117,7 +140,7 @@ function SearchAndFilter({
           Clear Filter
         </Button>
       </div>
-    </Card>
+    </div>
   );
 }
 

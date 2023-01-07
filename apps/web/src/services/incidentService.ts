@@ -34,6 +34,7 @@ export const getIncidents = async (
   userId: string,
   searchText?: string,
   incidentType?: IncidentType,
+  status?: Status,
   page?: number,
   perPage?: number,
   sortByCreatedAt?: boolean,
@@ -44,6 +45,7 @@ export const getIncidents = async (
     userId: userId,
     ...(searchText && { searchText: searchText }),
     ...(incidentType && { incidentType: incidentType }),
+    ...(status && { status: status }),
     ...(page && {
       page: page,
     }),

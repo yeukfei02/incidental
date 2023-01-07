@@ -9,9 +9,10 @@ interface Props {
   page: string;
   subPage?: string;
   incidentId?: string;
+  incidentRef?: string;
 }
 
-function CustomBreadcrumbs({ page, subPage, incidentId }: Props) {
+function CustomBreadcrumbs({ page, subPage, incidentId, incidentRef }: Props) {
   const navigate = useNavigate();
 
   const handlePageClick = (page: string) => {
@@ -73,7 +74,7 @@ function CustomBreadcrumbs({ page, subPage, incidentId }: Props) {
           >
             {page}
           </div>
-          <Typography color="text.primary">{subPage}</Typography>
+          <Typography color="text.primary">{subPage} (#{incidentRef})</Typography>
         </Breadcrumbs>
       );
     }
