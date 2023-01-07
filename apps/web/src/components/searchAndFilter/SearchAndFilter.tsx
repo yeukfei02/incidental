@@ -1,10 +1,8 @@
 import React from 'react';
-import Card from '@mui/material/Card';
 import Pagination from '@mui/material/Pagination';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Button from '@mui/material/Button';
 import Switch from '@mui/material/Switch';
-import { Typography } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
 import Grid from '@mui/material/Grid';
@@ -49,12 +47,8 @@ function SearchAndFilter({
   handleClearFilterClick,
 }: Props) {
   return (
-    <Card className="mt-5 p-7">
-      <Typography variant="h5">
-        <span className="font-bold">Search and Filter</span>
-      </Typography>
-
-      <div className="my-5">
+    <div className="p-3">
+      <div className="mb-5">
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
             <TextField
@@ -146,7 +140,7 @@ function SearchAndFilter({
           Clear Filter
         </Button>
       </div>
-    </Card>
+    </div>
   );
 }
 

@@ -2,6 +2,11 @@ import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import { Typography } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
@@ -38,6 +43,8 @@ function Dashboard() {
   const [page, setPage] = useState(1);
   const [sortByCreatedAt, setSortByCreatedAt] = useState(false);
   const [sortByUpdatedAt, setSortByUpdatedAt] = useState(false);
+
+  const [expanded, setExpanded] = useState(true);
 
   const token = localStorage.getItem('token');
   const userRole = localStorage.getItem('userRole');
@@ -199,6 +206,17 @@ function Dashboard() {
     setSortByUpdatedAt(e.target.checked);
   };
 
+  const handleAccordionChange = (
+    event: React.SyntheticEvent,
+    isExpanded: boolean
+  ) => {
+    if (expanded) {
+      setExpanded(false);
+    } else {
+      setExpanded(true);
+    }
+  };
+
   return (
     <>
       <CustomAppBar />
@@ -220,22 +238,37 @@ function Dashboard() {
           ) : null}
         </div>
 
-        <SearchAndFilter
-          searchText={searchText}
-          incidentType={incidentType}
-          status={status}
-          page={page}
-          sortByCreatedAt={sortByCreatedAt}
-          sortByUpdatedAt={sortByUpdatedAt}
-          totalPageCount={totalPageCount}
-          handlePageChange={handlePageChange}
-          handleSortByCreatedAt={handleSortByCreatedAt}
-          handleSortByUpdatedAt={handleSortByUpdatedAt}
-          handleIncidentTypeChange={handleIncidentTypeChange}
-          handleStatusChange={handleStatusChange}
-          handleSearchTextChange={handleSearchTextChange}
-          handleClearFilterClick={handleClearFilterClick}
-        />
+        <Accordion
+          className="my-5"
+          expanded={expanded}
+          onChange={handleAccordionChange}
+        >
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <Typography variant="h6">Search and Filter</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <SearchAndFilter
+              searchText={searchText}
+              incidentType={incidentType}
+              status={status}
+              page={page}
+              sortByCreatedAt={sortByCreatedAt}
+              sortByUpdatedAt={sortByUpdatedAt}
+              totalPageCount={totalPageCount}
+              handlePageChange={handlePageChange}
+              handleSortByCreatedAt={handleSortByCreatedAt}
+              handleSortByUpdatedAt={handleSortByUpdatedAt}
+              handleIncidentTypeChange={handleIncidentTypeChange}
+              handleStatusChange={handleStatusChange}
+              handleSearchTextChange={handleSearchTextChange}
+              handleClearFilterClick={handleClearFilterClick}
+            />
+          </AccordionDetails>
+        </Accordion>
 
         <IncidentCardList incidents={incidents} getIncidents={getIncidents} />
 
