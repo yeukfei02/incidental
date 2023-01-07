@@ -19,7 +19,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import CustomSnackBar from '../customSnackBar/CustomSnackBar';
 import IncidentCardList from '../incidentCardList/IncidentCardList';
 import CustomAppBar from '../customAppBar/CustomAppBar';
-import { IncidentType, Status, UserRole } from '@prisma/client';
+import { IncidentType, UserRole } from '@prisma/client';
 import * as incidentService from '../../services/incidentService';
 import CustomBreadcrumbs from '../customBreadcrumbs/CustomBreadcrumbs';
 import SearchAndFilter from '../searchAndFilter/SearchAndFilter';
@@ -33,8 +33,8 @@ function Dashboard() {
   const [description, setDescription] = useState('');
   const [createIncidentIncidentType, setCreateIncidentIncidentType] =
     useState<IncidentType>();
-  const [incidentType, setIncidentType] = useState<IncidentType>();
-  const [status, setStatus] = useState<Status>();
+  const [incidentType, setIncidentType] = useState<string[]>([]);
+  const [status, setStatus] = useState<string[]>([]);
 
   const [incidents, setIncidents] = useState([]);
   const [totalPageCount, setTotalPageCount] = useState(0);
@@ -70,8 +70,8 @@ function Dashboard() {
 
   const getIncidents = async (
     searchText?: string,
-    incidentType?: IncidentType,
-    status?: Status,
+    incidentType?: string[],
+    status?: string[],
     page?: number,
     sortByCreatedAt?: boolean,
     sortByUpdatedAt?: boolean
@@ -123,11 +123,13 @@ function Dashboard() {
   };
 
   const handleIncidentTypeChange = (event: SelectChangeEvent) => {
-    setIncidentType(event.target.value as IncidentType);
+    const { value } = event.target;
+    setIncidentType(typeof value === 'string' ? value.split(',') : value);
   };
 
   const handleStatusChange = (event: SelectChangeEvent) => {
-    setStatus(event.target.value as Status);
+    const { value } = event.target;
+    setStatus(typeof value === 'string' ? value.split(',') : value);
   };
 
   const handleCreateIncidentButtonClick = () => {
@@ -150,8 +152,8 @@ function Dashboard() {
 
   const handleClearFilterClick = () => {
     setSearchText('');
-    setIncidentType(undefined);
-    setStatus(undefined);
+    setIncidentType([]);
+    setStatus([]);
     setPage(1);
     setSortByCreatedAt(false);
     setSortByUpdatedAt(false);
@@ -186,7 +188,7 @@ function Dashboard() {
 
           setTitle('');
           setDescription('');
-          setIncidentType(undefined);
+          setIncidentType([]);
 
           await getIncidents(searchText);
         }

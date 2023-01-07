@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Incident, UserRole, Status } from '@prisma/client';
+import { Incident, UserRole, Status, IncidentType } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
 import { v4 as uuidv4 } from 'uuid';
 import { AssignIncidentStatusDto } from './dto/assignIncidentStatus.dto';
@@ -108,12 +108,12 @@ export class IncidentRepository {
         }),
         ...(incidentType && {
           type: {
-            in: [incidentType],
+            in: incidentType as IncidentType[],
           },
         }),
         ...(status && {
           status: {
-            in: [status],
+            in: status as Status[],
           },
         }),
       },
