@@ -141,15 +141,6 @@ function Login() {
                 Login
               </Button>
               <Grid container>
-                <Grid item xs>
-                  <Link
-                    component="button"
-                    onClick={() => navigate(Url.HOME)}
-                    variant="body2"
-                  >
-                    Forgot password?
-                  </Link>
-                </Grid>
                 <Grid item>
                   <Link
                     component="button"
