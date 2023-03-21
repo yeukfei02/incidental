@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.3](https://github.com/yeukfei02/incidental/compare/v0.1.2...v0.1.3) (2023-03-21)
+
+
+### Features
+
+* 🎸 add screenshot ([36355de](https://github.com/yeukfei02/incidental/commit/36355deb22f17aa5100c1bfa928a9ff6b3076966))
+* 🎸 enable select dropdown to multiple ([7002fde](https://github.com/yeukfei02/incidental/commit/7002fde2561dfe4ffcd0706064cb6440e7de10f0))
+
+
+### Bug Fixes
+
+* 🐛 update prisma lib ([09446ca](https://github.com/yeukfei02/incidental/commit/09446cac943b87cd220c9267e0325094431c48d9))
+* 🐛 update prisma lib ([937090f](https://github.com/yeukfei02/incidental/commit/937090f54b08f570d48a466fa0a4c5eb5e340460))
+* 🐛 update readme.md ([3d18b69](https://github.com/yeukfei02/incidental/commit/3d18b698c1e09f0fdd4d78435a61b54b95269bf9))
+
 ### [0.1.2](https://github.com/yeukfei02/incidental/compare/v0.1.1...v0.1.2) (2023-01-07)
 
 
